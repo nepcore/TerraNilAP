@@ -1,0 +1,8 @@
+{
+  "game": "Terra Nil",
+  "minimum_ap_version": "0.6.7",
+  "world_version": "0.0.0",
+  "authors": ["nepcore"],
+  "version": 7,
+  "compatible_version": 7
+}
