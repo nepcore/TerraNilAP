@@ -181,6 +181,7 @@ class ArchipelagoBuildings(BuildingEnum):
     # AnimalObservatory = (500, "Animal Observatory")
 
 
+
 ## Region Polar
 
 class VolcanicGlacierBuildings(BuildingEnum):
@@ -328,9 +329,9 @@ class ContinentalOutskirtsBuildings(BuildingEnum):
     # WildlifeBridge =    (326, "Wildlife Bridge")
     # CloudSeeder =       (404, "Cloud Seeder")
     # AnimalObservatory = (500, "Animal Observatory")
-    
-    
-    
+
+
+
 # Region Arid
 
 class ParchedDunesBuildings(BuildingEnum):
