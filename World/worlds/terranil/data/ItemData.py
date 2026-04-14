@@ -3,6 +3,7 @@
 from enum import Enum
 from dataclasses import dataclass
 from BaseClasses import ItemClassification
+from worlds.terranil.data.ItemBuildingsLists import RiverValleyBuildings
 
 
 ## Redundant
@@ -61,7 +62,7 @@ class TerraNilMapData:
 all_map_datas = {
     "River Valley":          TerraNilMapData(displayname = "River Valley",          region = "Temperate", InternalID= 10, InternalName= "TemperateRiver"),
     "Abandoned Quarry":      TerraNilMapData(displayname = "Abandoned Quarry",      region = "Temperate", InternalID= 11, InternalName= "TemperateQuarry"),
-    "Polluted Bay":          TerraNilMapData(displayname = "Abandoned Quarry",      region = "Temperate", InternalID= 11, InternalName= "TemperateQuarry"),
+    "Polluted Bay":          TerraNilMapData(displayname = "Polluted Bay",          region = "Temperate", InternalID= 11, InternalName= "TemperateBay"),
     "Hill and Dale":         TerraNilMapData(displayname = "Hill and Dale",         region = "Temperate", InternalID= 13, InternalName= "TemperateHillAndDale"),
 
     "Desolate Island":       TerraNilMapData(displayname = "Desolate Island",       region = "Tropical", InternalID= 20, InternalName= "TropicalIsland"),
@@ -91,40 +92,6 @@ def get_map_internal_name(map_name: str) -> str:
 
 
 
-
-class BuildingEnum(Enum):
-    def __int__(self):
-        return self.value[0]
-
-    def __str__(self):
-        return self.value[1]
-
-
-class RiverValleyBuildings(BuildingEnum):
-    "The building IDs for all buildings in River Valley"
-    Turbine =           (100, "Wind Turbine")
-    ToxinScrubber =     (101, "Toxin Scrubber")
-    Irrigator =         (102, "Irrigator")
-    Excavator =         (103, "Excavator")
-    WaterPump =         (104, "Water Pump")
-    Calcifier =         (105, "Calcifier")
-    ResearchCenter =    (200, "Research Center")
-    Hydroponium =       (201, "Hydroponium")
-    Beehive =           (202, "Beehive")
-    Arboretum =         (203, "Arboretum")
-    SolarAmplifier =    (205, "Solar Amplifier")
-    Airship =           (300, "Airship")
-    LoadingDock =       (301, "Loading Dock")
-    PoundLock =         (302, "Pound Lock")
-    RecyclingSilo =     (303, "Recycling Silo")
-    RecyclingDrone =    (304, "Recycling Drone")
-    SonicPulse =        (325, "Sonic Pulse")
-    WildlifeBridge =    (326, "Wildlife Bridge")
-    CloudSeeder =       (404, "Cloud Seeder")
-    AnimalObservatory = (500, "Animal Observatory")
-
-
-
 # THis world considers all of its own item IDs to be 32 bit
 # Any ID with the highest order bit set is treated in a special way by the client mod
 # All other IDs are just normal numbers that cover any items that do not fit the following schema
@@ -145,27 +112,23 @@ class RiverValleyBuildings(BuildingEnum):
 
 
 # For Map IDs, we follow the following convention:
-def generate_mapunlock_id(slot_number: int) -> int:
+def generate_mapunlock_id(map_id: int) -> int:
     """
-    (WIP)
-    
     Constructs an ID for a given building based on it's region id, tier, and the slot number.
 
     The ID is a 32-bit integer. 
     The first bit is always 1.
-    The second bit denotes that this item is a building unlock, and will be set to 1.
-    The next bits denote other use cases, which are thus unset.
+    The next bit denotes that this item is a building or map unlock, and will be set to 1.
+    The next 7 bits denote other use cases, which are thus unset.
 
     The next 12 bits denote the region id.
-    The next 12 bits denote the slot id.
+    The next 12 bits are 0.
     These are determined by the game itself and immutable.
     """
-    raise NotImplementedError()
     first_bit = 1 << 31
-    classification_bits = 1 << 30 #This is a building
-    region_bits = region_id << 12
-    slot_bits = slot_number
-    return first_bit | classification_bits | region_bits | slot_bits
+    classification_bits = 1 << 30 #This is a a map
+    map_bits = map_id << 12
+    return first_bit | classification_bits | map_bits
 
 # For Building IDs, we follow the following convention:
 def generate_building_id(map_id: int, slot_number: int) -> int:
@@ -174,8 +137,8 @@ def generate_building_id(map_id: int, slot_number: int) -> int:
 
     The ID is a 32-bit integer. 
     The first bit is always 1.
-    The second bit denotes that this item is a building unlock, and will be set to 1.
-    The next bits denote other use cases, which are thus unset.
+    The second bit denotes that this item is a building or map unlock, and will be set to 1.
+    The next 6 bits denote other use cases, which are thus unset.
 
     The next 12 bits denote the region id.
     The next 12 bits denote the slot id.
@@ -183,9 +146,9 @@ def generate_building_id(map_id: int, slot_number: int) -> int:
     """
     first_bit = 1 << 31
     classification_bits = 1 << 30 #This is a building
-    region_bits = map_id << 12
+    map_bits = map_id << 12
     slot_bits = slot_number
-    return first_bit | classification_bits | region_bits | slot_bits
+    return first_bit | classification_bits | map_bits | slot_bits
 
 
 maps_as_items = dict()
