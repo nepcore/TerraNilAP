@@ -2,5 +2,9 @@
 .dir-locals.el
 .cache
 .vscode
+__pycache__
+World.__pycache__
+World.worlds.__pycache__
+World.worlds.terranil.__pycache__
 obj
 bin
