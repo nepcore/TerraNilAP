@@ -1,11 +1,23 @@
 from enum import Enum
 
 class BuildingEnum(Enum):
-    def __int__(self):
-        return self.value[0]
-
-    def __str__(self):
+    def get_internal_id(self) -> int:
+        internal_id = self.value[0]
+        if internal_id == 999:
+            raise NotImplementedError(f"The building {str(self)} is not implemented yet.")
+        return internal_id
+    
+    def get_displayname(self) -> str:
         return self.value[1]
+    
+    def get_tier(self) -> int:
+        return self.value[2]
+    
+    def __int__(self) -> int: 
+        return self.get_internal_id()
+
+    def __str__(self) -> str:
+        return self.get_displayname()
 
 
 ## Region Temperate
