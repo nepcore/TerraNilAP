@@ -12,26 +12,28 @@ class BuildingEnum(Enum):
 
 class RiverValleyBuildings(BuildingEnum):
     "The building IDs for all buildings in River Valley"
-    Turbine =           (100, "Turbine")
-    ToxinScrubber =     (101, "Toxin Scrubber")
-    Irrigator =         (102, "Irrigator")
-    Excavator =         (103, "Excavator")
-    WaterPump =         (104, "Water Pump")
-    Calcifier =         (105, "Calcifier")
-    ResearchCenter =    (200, "Research Center")
-    Hydroponium =       (201, "Hydroponium")
-    Beehive =           (202, "Beehive")
-    Arboretum =         (203, "Arboretum")
-    SolarAmplifier =    (205, "Solar Amplifier")
-    Airship =           (300, "Airship")
-    LoadingDock =       (301, "Loading Dock")
-    PoundLock =         (302, "Pound Lock")
-    RecyclingSilo =     (303, "Recycling Silo")
-    RecyclingDrone =    (304, "Recycling Drone")
-    SonicPulse =        (325, "Sonic Pulse")
-    WildlifeBridge =    (326, "Wildlife Bridge")
-    CloudSeeder =       (404, "Cloud Seeder")
-    AnimalObservatory = (500, "Animal Observatory")
+    Turbine =           (100, "Turbine", 1)
+    ToxinScrubber =     (101, "Toxin Scrubber", 1)
+    Irrigator =         (102, "Irrigator", 1)
+    Excavator =         (103, "Excavator", 1)
+    WaterPump =         (104, "Water Pump", 1)
+    Calcifier =         (105, "Calcifier", 1)
+    
+    ResearchCenter =    (200, "Research Center", 2)
+    Hydroponium =       (201, "Hydroponium", 2)
+    Beehive =           (202, "Beehive", 2)
+    Arboretum =         (203, "Arboretum", 2)
+    SolarAmplifier =    (205, "Solar Amplifier", 2)
+    
+    Airship =           (300, "Airship", 3)
+    LoadingDock =       (301, "Loading Dock", 3)
+    PoundLock =         (302, "Pound Lock", 3)
+    RecyclingSilo =     (303, "Recycling Silo", 3)
+    RecyclingDrone =    (304, "Recycling Drone", 3)
+    SonicPulse =        (325, "Sonic Pulse", 3)
+    WildlifeBridge =    (326, "Wildlife Bridge", 3)
+    CloudSeeder =       (404, "Cloud Seeder", 2)
+    AnimalObservatory = (500, "Animal Observatory", 3)
 
 
 class HillAndDaleBuildings(BuildingEnum):
