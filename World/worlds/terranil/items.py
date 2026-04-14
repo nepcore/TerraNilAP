@@ -7,10 +7,6 @@ from BaseClasses import Item, ItemClassification
 if TYPE_CHECKING:
     from .world import TerraNilWorld
 
-import os
-
-print(os.getcwd())
-
 ITEM_NAME_TO_ID = {}
 
 class TerraNilItem(Item):
