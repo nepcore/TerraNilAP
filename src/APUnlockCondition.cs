@@ -17,7 +17,7 @@ class APUnlockCondition : BuildingButtonUnlockCondition
     private int ItemsReceived()
     {
         var mission = (uint) MonoSingleton<CampaignStateManager>.Instance.GameState.missionKey;
-	var building = (uint) this.type;
+        var building = (uint) this.type;
         var id = (1u << 31) | (1u << 30) | (mission << 12) | building;
         return TerraNilAP.Session.Items.AllItemsReceived.Select(item => item.ItemId).Contains(id) ? 1 : 0;
     }

@@ -3,7 +3,11 @@ using Archipelago.MultiClient.Net.Helpers;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
+using Model;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Reflection;
+using TerraNilAP.MissionLogic;
 using TMPro;
 using UnityEngine;
 
@@ -18,6 +22,7 @@ public class TerraNilAP : BaseUnityPlugin
 
     public static Harmony Harmony;
     public static ArchipelagoSession Session;
+    public static Dictionary<Mission, IMissionLogic> MissionLogic = new Dictionary<Mission, IMissionLogic>();
     public static TMP_FontAsset Font;
 
     private void Awake()
@@ -28,6 +33,10 @@ public class TerraNilAP : BaseUnityPlugin
         Logger.LogInfo($"Loading resources");
         var fontObj = UnityEngine.Resources.Load<UnityEngine.Font>("default/KorolevRoundedMedium");
         Font = TMP_FontAsset.CreateFontAsset(fontObj);
+        if (MissionLogic.Count == 0)
+        {
+            MissionLogic.Add(Mission.TemperateRiver, new RiverValleyLogic());
+        }
 
         Logger.LogInfo($"Injecting essential patches");
         var harmony = new Harmony("terranilap.essential");
@@ -45,13 +54,18 @@ public class TerraNilAP : BaseUnityPlugin
         }
     }
 
+    public static void MissionCompleted(Mission mission)
+    {
+        Session.SetGoalAchieved();
+    }
+
     public static Sprite SpriteFromResource(string name)
     {
-        var tex = new UnityEngine.Texture2D(2, 2);
+        var tex = new Texture2D(2, 2);
         var res = Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
         var bytes = new byte[res.Length];
         res.Read(bytes, 0, bytes.Length);
         ImageConversion.LoadImage(tex, bytes);
-        return Sprite.Create(tex, new UnityEngine.Rect(0, 0, tex.width, tex.height), UnityEngine.Vector2.zero);
+        return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
     }
 }
