@@ -129,7 +129,7 @@ for displayname, data in all_map_datas.items():
     maps_as_items[f"{displayname} Map"] = (ItemClassification.progression)
     
 maps_to_id = {
-    displayname: generate_mapunlock_id(map_id=data.InternalID) for displayname, data in all_map_datas.items()
+    f"{displayname} Map": generate_mapunlock_id(map_id=data.InternalID) for displayname, data in all_map_datas.items()
 }
     
 buildings_rivervalley_as_items = dict()
