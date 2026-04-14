@@ -43,7 +43,7 @@ LOCATION_NAME_TO_ID = {
 }
 
 class TerraNilLocation(Location):
-    game = "Terra Nil"
+    game = "TerraNil"
 
 def get_location_names_with_ids(location_names: list[str]) -> dict[str, int | None]:
     return {location_name: LOCATION_NAME_TO_ID[location_name] for location_name in location_names}

@@ -3,7 +3,7 @@ from worlds.AutoWorld import WebWorld
 from .options import option_groups, option_presets
 
 class TerraNilWebWorld(WebWorld):
-    game = "Terra Nil"
+    game = "TerraNil"
     theme = "grassFlowers"
     setup_en = Tutorial(
         "Multiworld Setup Guide",

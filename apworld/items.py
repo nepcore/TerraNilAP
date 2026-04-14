@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 ITEM_NAME_TO_ID = {}
 
 class TerraNilItem(Item):
-    game = "Terra Nil"
+    game = "TerraNil"
 
 class Building(Enum):
     Turbine = 100, "Wind Turbine"
