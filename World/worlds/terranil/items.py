@@ -3,9 +3,13 @@ from typing import List, Dict, Set, TYPE_CHECKING
 from dataclasses import dataclass
 from enum import Enum
 from BaseClasses import Item, ItemClassification
-from .missions import Mission
+# from .missions import Mission
 if TYPE_CHECKING:
     from .world import TerraNilWorld
+
+import os
+
+print(os.getcwd())
 
 ITEM_NAME_TO_ID = {}
 
@@ -39,6 +43,19 @@ class Building(Enum):
 
     def __str__(self):
         return self.value[1]
+
+from enum import Enum
+
+class Mission(Enum):
+    All = 0, "All"
+    RiverValley = 10, "River Valley"
+
+    def __int__(self):
+        return self.value[0]
+
+    def __str__(self):
+        return self.value[1]
+
 
 # THis world considers all of its own item IDs to be 32 bit
 # Any ID with the highest order bit set is treated in a special way by the client mod

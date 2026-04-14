@@ -4,30 +4,32 @@ from enum import Enum
 from dataclasses import dataclass
 from BaseClasses import ItemClassification
 
-maps_as_items = {
-    "River Valley Map":          (ItemClassification.progression),
-    ## Currently only River Valley is implemented. Below are the other, yet-to-be-implemented regions. Uncomment them to add them as progression items.
 
-    # "Hill and Dale Map":         (ItemClassification.progression),
-    # "Polluted Bay Map":          (ItemClassification.progression),
-    # "Abandoned Quarry Map":      (ItemClassification.progression),
+## Redundant
+# maps_as_items = {
+#     "River Valley Map":          (ItemClassification.progression),
+#     ## Currently only River Valley is implemented. Below are the other, yet-to-be-implemented regions. Uncomment them to add them as progression items.
 
-    # "Desolate Island Map":       (ItemClassification.progression),
-    # "Scorched Caldera Map":      (ItemClassification.progression),
-    # "Archipelago Map":           (ItemClassification.progression),
+#     # "Hill and Dale Map":         (ItemClassification.progression),
+#     # "Polluted Bay Map":          (ItemClassification.progression),
+#     # "Abandoned Quarry Map":      (ItemClassification.progression),
 
-    # "Volcanic Glacier Map":      (ItemClassification.progression),
-    # "Subpolar River Map":        (ItemClassification.progression),
-    # "Polluted Fjord Map":        (ItemClassification.progression),
+#     # "Desolate Island Map":       (ItemClassification.progression),
+#     # "Scorched Caldera Map":      (ItemClassification.progression),
+#     # "Archipelago Map":           (ItemClassification.progression),
 
-    # "Flooded City Map":          (ItemClassification.progression),
-    # "Continental Outskirts Map": (ItemClassification.progression),
-    # "Irradiated Sprawl Map":     (ItemClassification.progression),
+#     # "Volcanic Glacier Map":      (ItemClassification.progression),
+#     # "Subpolar River Map":        (ItemClassification.progression),
+#     # "Polluted Fjord Map":        (ItemClassification.progression),
 
-    # "Parched Dunes Map":         (ItemClassification.progression),
-    # "Canyon Peaks Map":          (ItemClassification.progression),
-    # "Fracked Floodplain Map":    (ItemClassification.progression),
-}
+#     # "Flooded City Map":          (ItemClassification.progression),
+#     # "Continental Outskirts Map": (ItemClassification.progression),
+#     # "Irradiated Sprawl Map":     (ItemClassification.progression),
+
+#     # "Parched Dunes Map":         (ItemClassification.progression),
+#     # "Canyon Peaks Map":          (ItemClassification.progression),
+#     # "Fracked Floodplain Map":    (ItemClassification.progression),
+# }
 
 
 @dataclass
@@ -142,8 +144,31 @@ class RiverValleyBuildings(BuildingEnum):
 #           |  MissionID | BuildingID |
 
 
+# For Map IDs, we follow the following convention:
+def generate_mapunlock_id(slot_number: int) -> int:
+    """
+    (WIP)
+    
+    Constructs an ID for a given building based on it's region id, tier, and the slot number.
+
+    The ID is a 32-bit integer. 
+    The first bit is always 1.
+    The second bit denotes that this item is a building unlock, and will be set to 1.
+    The next bits denote other use cases, which are thus unset.
+
+    The next 12 bits denote the region id.
+    The next 12 bits denote the slot id.
+    These are determined by the game itself and immutable.
+    """
+    raise NotImplementedError()
+    first_bit = 1 << 31
+    classification_bits = 1 << 30 #This is a building
+    region_bits = region_id << 12
+    slot_bits = slot_number
+    return first_bit | classification_bits | region_bits | slot_bits
+
 # For Building IDs, we follow the following convention:
-def generate_building_id(region_id: int, slot_number: int) -> int:
+def generate_building_id(map_id: int, slot_number: int) -> int:
     """
     Constructs an ID for a given building based on it's region id, tier, and the slot number.
 
@@ -158,12 +183,18 @@ def generate_building_id(region_id: int, slot_number: int) -> int:
     """
     first_bit = 1 << 31
     classification_bits = 1 << 30 #This is a building
-    region_bits = region_id << 12
+    region_bits = map_id << 12
     slot_bits = slot_number
     return first_bit | classification_bits | region_bits | slot_bits
 
 
-
+maps_as_items = dict()
+for displayname, data in all_map_datas.items():
+    maps_as_items[f"{displayname} Map"] = (ItemClassification.progression)
+    
+buildings_rivervalley_as_items = dict()
+for displayname in RiverValleyBuildings:
+    buildings_rivervalley_as_items[f"River Valley {displayname}"] = (ItemClassification.progression)
 
 buildings_rivervalley_to_id = {
     str(x) : generate_building_id(get_map_id("River Valley"), int(x)) for x in RiverValleyBuildings
@@ -171,3 +202,9 @@ buildings_rivervalley_to_id = {
 
 for key, value in buildings_rivervalley_to_id.items():
     print(f"{key:<20}: {value:b}")
+
+for key, value in buildings_rivervalley_to_id.items():
+    print(f"{key:<20}: {value:b}")
+
+for x in buildings_rivervalley_as_items.items():
+    print(x)
