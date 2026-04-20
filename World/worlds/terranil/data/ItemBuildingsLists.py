@@ -545,7 +545,7 @@ all_building_enums_list = [
 def test_building_enum(enum_to_test: BuildingEnum, test_id: bool = True, test_tier: bool = True) -> bool:
     has_erred = False
     print(f"\nMap: {enum_to_test.__name__}")
-    for i in enum_to_test:
+    for i in enum_to_test: # type: ignore
         display_name = i.get_displayName()
         if test_id:
             try:
