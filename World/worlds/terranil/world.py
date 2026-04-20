@@ -7,7 +7,7 @@ from . import options as terranil_options
 class TerraNilWorld(World):
     """Terra Nil is an intricate environmental strategy game about transforming a barren wasteland into a thriving, balanced ecosystem."""
 
-    game = "Terra Nil"
+    game = "TerraNil"
 
     web = web_world.TerraNilWebWorld()
 
