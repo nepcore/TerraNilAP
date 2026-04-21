@@ -12,7 +12,7 @@ class TerraNilWorld(World):
     web = web_world.TerraNilWebWorld()
 
     options_dataclass = terranil_options.TerraNilOptions
-    options: terranil_options.TerraNilOptions
+    options: terranil_options.TerraNilOptions # type: ignore ##No warning needed, expected behaviour.
 
     location_name_to_id = locations.LOCATION_NAME_TO_ID
     item_name_to_id = items.ITEM_NAME_TO_ID
