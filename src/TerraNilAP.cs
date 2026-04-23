@@ -6,6 +6,7 @@ using HarmonyLib;
 using Model;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 using TerraNilAP.MissionLogic;
 using TMPro;
 using UnityEngine;
@@ -89,6 +90,9 @@ public class TerraNilAP : BaseUnityPlugin
     {
         Completed.Add(mission);
         if (Completed.Count == 2) Session.SetGoalAchieved();
+        var toSave = Completed.Select(m => (int) m).Select(m => m.ToString()).Join(delimiter: ",");
+        var platform = Utils.MonoSingleton<Global.CampaignStateManager>.Instance.Platform;
+        System.IO.File.WriteAllText(System.IO.Path.Combine(platform.ProfileDirectory, "missions.ap"), toSave);
     }
 
     public static Sprite SpriteFromResource(string name)

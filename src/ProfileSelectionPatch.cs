@@ -65,7 +65,7 @@ class ProfileSelectionPatch
         TerraNilAP.Harmony.PatchAll(typeof(GetBuldingDataPatch));
         TerraNilAP.Harmony.PatchAll(typeof(CreateBuildingPatch));
         TerraNilAP.Harmony.PatchAll(typeof(GameStateSyncPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(MissionStartPatch));
+        TerraNilAP.Harmony.PatchAll(typeof(LaunchButtonPatch));
         TerraNilAP.Harmony.PatchAll(typeof(DifficultyPatch));
         TerraNilAP.Harmony.PatchAll(typeof(PhotoTakerPatch));
         TerraNilAP.Harmony.PatchAll(typeof(NewGamePatch));
@@ -114,19 +114,6 @@ class ProfileSelectionPatch
                 TerraNilAP.Completed = new System.Collections.Generic.HashSet<Model.Mission>();
                 try
                 {
-                    TerraNilAP.Logger.LogInfo("Setting up archipelago profile");
-                    var profileName = "Archipelago";
-                    MonoSingleton<CampaignStateManager>.Instance.DeletePlayerProfileFiles(profileName);
-                    MonoSingleton<CampaignStateManager>.Instance.CreateAndAssignNewProfile(profileName);
-                    MonoSingleton<ProfileSelectionHandler>.Instance.UpdateAllProfileLanguages();
-                    var profileState = MonoSingleton<CampaignStateManager>.Instance.LoadPlayerProfile(profileName);
-                    //profileState.difficultyState.hasSelectedDifficulty = true;
-                    profileState.hasPlayedTutorial = true;
-                    profileState.hasPlayedClimateTutorial = true;
-                    profileState.hasPlayedAnimalTutorialIntro = true;
-                    profileState.hasPlayedAnimalTutorialGoal = true;
-                    profileState.hasPlayedAbilityTutorial = true;
-                    MonoSingleton<CampaignStateManager>.Instance.SetProfileState(profileState);
                     TerraNilAP.Logger.LogInfo("Initiating connecting");
                     var roomInfo = await TerraNilAP.Session.ConnectAsync();
                     TerraNilAP.Logger.LogInfo("Logging in");
@@ -145,6 +132,20 @@ class ProfileSelectionPatch
                             MonoSingleton<MessageHandler>.Instance.CreateConfirmationDialog("Login failed", fail.Errors.Join(delimiter: "\n"));
                             return;
                         case LoginSuccessful login:
+                            TerraNilAP.Logger.LogInfo("Setting up archipelago profile");
+                            var profileName = $"Archipelago {roomInfo.SeedName} {login.Team} {login.Slot}";
+                            //MonoSingleton<CampaignStateManager>.Instance.DeletePlayerProfileFiles(profileName);
+                            if (MonoSingleton<CampaignStateManager>.Instance.LoadPlayerProfile(profileName) == null)
+                                MonoSingleton<CampaignStateManager>.Instance.CreateAndAssignNewProfile(profileName);
+                            MonoSingleton<ProfileSelectionHandler>.Instance.UpdateAllProfileLanguages();
+                            var profileState = MonoSingleton<CampaignStateManager>.Instance.LoadPlayerProfile(profileName);
+                            //profileState.difficultyState.hasSelectedDifficulty = true;
+                            profileState.hasPlayedTutorial = true;
+                            profileState.hasPlayedClimateTutorial = true;
+                            profileState.hasPlayedAnimalTutorialIntro = true;
+                            profileState.hasPlayedAnimalTutorialGoal = true;
+                            profileState.hasPlayedAbilityTutorial = true;
+                            MonoSingleton<CampaignStateManager>.Instance.SetProfileState(profileState);
                             TerraNilAP.Logger.LogInfo("Setting up handlers");
                             TerraNilAP.Session.Items.ItemReceived += TerraNilAP.ReceivedItem;
                             MonoSingleton<ProfileSelectionHandler>.Instance.Hide();
@@ -156,6 +157,23 @@ class ProfileSelectionPatch
                             };
                             InjectPatches();
                             TerraNilAP.Logger.LogInfo("Connection successful");
+                            var platform = MonoSingleton<CampaignStateManager>.Instance.Platform;
+                            TerraNilAP.Completed = new();
+                            if (System.IO.File.Exists(System.IO.Path.Combine(platform.ProfileDirectory, "missions.ap")))
+                            {
+                                var loaded = System.IO.File.ReadAllText(System.IO.Path.Combine(platform.ProfileDirectory, "missions.ap"));
+                                foreach (var m in loaded.Split(','))
+                                {
+                                    try {
+                                        TerraNilAP.Completed.Add((Model.Mission) int.Parse(m));
+                                    }
+                                    catch (System.Exception e)
+                                    {
+                                        TerraNilAP.Logger.LogError($"Failed parsing {m} as mission: {e.Message}\n{e.StackTrace}");
+                                    }
+                                }
+                            }
+                            TerraNilAP.Logger.LogInfo($"{TerraNilAP.Completed.Count} missions already completed");
                             return;
                     }
                 }
