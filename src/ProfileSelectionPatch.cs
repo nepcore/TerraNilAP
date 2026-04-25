@@ -83,6 +83,12 @@ class ProfileSelectionPatch
     {
         TerraNilAP.Harmony.UnpatchSelf();
         Object.DestroyImmediate(cutsceneSkipper);
+        if (TerraNilAP.Console != null)
+        {
+            TerraNilAP.Session.MessageLog.OnMessageReceived -= TerraNilAP.Console.AddAPMessage;
+            TerraNilAP.Console.Destroy();
+            TerraNilAP.Console = null;
+        }
     }
 
     public static async void OnSelectArchipelago()
@@ -108,20 +114,35 @@ class ProfileSelectionPatch
             "",
             async delegate
             {
+                // extracting the values before anything else is a MUST, obtaining them where
+                // needed results in some setups destroying the inputs before we get their content
+                var hostStr = host.GetComponent<TMPro.TMP_InputField>().text;
+                var portStr = port.GetComponent<TMPro.TMP_InputField>().text;
+                var slotStr = slot.GetComponent<TMPro.TMP_InputField>().text;
+                var passStr = pass.GetComponent<TMPro.TMP_InputField>().text;
+
                 TerraNilAP.Logger.LogInfo("Connecting to archipelago");
                 TerraNilAP.Logger.LogInfo("Creating session");
-                TerraNilAP.Session = ArchipelagoSessionFactory.CreateSession(host.GetComponent<TMPro.TMP_InputField>().text + ":" + port.GetComponent<TMPro.TMP_InputField>().text);
+                TerraNilAP.Session = ArchipelagoSessionFactory.CreateSession(hostStr + ":" + portStr);
                 TerraNilAP.Completed = new System.Collections.Generic.HashSet<Model.Mission>();
+                TerraNilAP.Console = new APConsole.APConsole(
+                    TerraNilAP.ConsoleAssets,
+                    (_, to) => {
+                        return to.name == "WorldMap" || to.name == "Main";
+                    }
+                );
+                TerraNilAP.Console.SetFont(TerraNilAP.Font);
+                TerraNilAP.Session.MessageLog.OnMessageReceived += TerraNilAP.Console.AddAPMessage;
                 try
                 {
-                    TerraNilAP.Logger.LogInfo("Initiating connecting");
+                    TerraNilAP.Logger.LogInfo("Initiating connection");
                     var roomInfo = await TerraNilAP.Session.ConnectAsync();
                     TerraNilAP.Logger.LogInfo("Logging in");
                     var loginResult = await TerraNilAP.Session.LoginAsync(
                         TerraNilAP.GameName,
-                        slot.GetComponent<TMPro.TMP_InputField>().text,
+                        slotStr,
                         Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags.AllItems,
-                        password: pass.GetComponent<TMPro.TMP_InputField>().text,
+                        password: passStr,
                         requestSlotData: true
                     );
 
@@ -134,10 +155,11 @@ class ProfileSelectionPatch
                         case LoginSuccessful login:
                             TerraNilAP.Logger.LogInfo("Setting up archipelago profile");
                             var profileName = $"Archipelago {roomInfo.SeedName} {login.Team} {login.Slot}";
-                            //MonoSingleton<CampaignStateManager>.Instance.DeletePlayerProfileFiles(profileName);
                             if (MonoSingleton<CampaignStateManager>.Instance.LoadPlayerProfile(profileName) == null)
+                            {
                                 MonoSingleton<CampaignStateManager>.Instance.CreateAndAssignNewProfile(profileName);
-                            MonoSingleton<ProfileSelectionHandler>.Instance.UpdateAllProfileLanguages();
+                            }
+                                MonoSingleton<ProfileSelectionHandler>.Instance.UpdateAllProfileLanguages();
                             var profileState = MonoSingleton<CampaignStateManager>.Instance.LoadPlayerProfile(profileName);
                             //profileState.difficultyState.hasSelectedDifficulty = true;
                             profileState.hasPlayedTutorial = true;
@@ -176,6 +198,11 @@ class ProfileSelectionPatch
                             TerraNilAP.Logger.LogInfo($"{TerraNilAP.Completed.Count} missions already completed");
                             return;
                     }
+                }
+                catch (System.Threading.Tasks.TaskCanceledException ex)
+                {
+                    TerraNilAP.Logger.LogError($"Failed connecting to archipelago: {ex.InnerException}");
+                    MonoSingleton<MessageHandler>.Instance.CreateConfirmationDialog("Error", "Connection failed. Are host and port correct?");
                 }
                 catch (System.Exception ex)
                 {

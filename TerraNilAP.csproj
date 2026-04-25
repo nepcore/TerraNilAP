@@ -44,6 +44,7 @@
     </Reference>
 
     <EmbeddedResource Include="assets/archipelago.png" />
+    <EmbeddedResource Include="assets/console" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">

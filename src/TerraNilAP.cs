@@ -25,6 +25,8 @@ public class TerraNilAP : BaseUnityPlugin
     public static HashSet<Mission> Completed;
     public static Dictionary<Mission, IMissionLogic> MissionLogic = new Dictionary<Mission, IMissionLogic>();
     public static TMP_FontAsset Font;
+    public static APConsole.APConsole Console;
+    public static AssetBundle ConsoleAssets;
 
     private void Awake()
     {
@@ -34,6 +36,7 @@ public class TerraNilAP : BaseUnityPlugin
         Logger.LogInfo($"Loading resources");
         var fontObj = UnityEngine.Resources.Load<UnityEngine.Font>("default/KorolevRoundedMedium");
         Font = TMP_FontAsset.CreateFontAsset(fontObj);
+        ConsoleAssets = AssetBundle.LoadFromStream(TerraNilAP.GetResource("TerraNilAP.assets.console"));
         if (MissionLogic.Count == 0)
         {
             MissionLogic.Add(Mission.TemperateRiver, new RiverValleyLogic());
@@ -95,10 +98,15 @@ public class TerraNilAP : BaseUnityPlugin
         System.IO.File.WriteAllText(System.IO.Path.Combine(platform.ProfileDirectory, "missions.ap"), toSave);
     }
 
+    public static System.IO.Stream GetResource(string name)
+    {
+        return Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
+    }
+
     public static Sprite SpriteFromResource(string name)
     {
         var tex = new Texture2D(2, 2);
-        var res = Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
+        var res = GetResource(name);
         var bytes = new byte[res.Length];
         res.Read(bytes, 0, bytes.Length);
         ImageConversion.LoadImage(tex, bytes);
