@@ -14,6 +14,7 @@ public class APConsole
     private string history;
     private Func<Scene, Scene, bool> shouldRender;
     private AssetBundle AssetBundle;
+    private TMP_FontAsset Font;
 
     public APConsole(
         AssetBundle assetBundle,
@@ -39,6 +40,7 @@ public class APConsole
 
         consoleText = console.transform.Find("Scroll View/Viewport/Content").gameObject.AddComponent<TextMeshProUGUI>();
         if (history != null) consoleText.text = history;
+        if (Font != null) consoleText.font = Font;
         consoleText.fontSize = 24;
         consoleText.paragraphSpacing = 25;
         consoleText.margin = new (8, 8, 8, 8);
@@ -46,6 +48,7 @@ public class APConsole
 
     public void SetFont(TMP_FontAsset font)
     {
+        Font = font;
         consoleText.font = font;
     }
 
