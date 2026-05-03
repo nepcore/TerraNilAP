@@ -1,6 +1,6 @@
 from collections.abc import Mapping
 from typing import Any
-from worlds.AutoWorld import World
+from worlds.AutoWorld import World  #type: ignore
 from . import items, locations, regions, rules, web_world
 from . import options as terranil_options
 
