@@ -74,7 +74,12 @@ class ProfileSelectionPatch
         TerraNilAP.Harmony.PatchAll(typeof(StartMissionPatch));
         TerraNilAP.Harmony.PatchAll(typeof(LoadScenePatch));
         TerraNilAP.Harmony.PatchAll(typeof(ProgressionInterfaceHandlerPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(PauseMenuWorldMapPatch));
+        TerraNilAP.Harmony.PatchAll(typeof(PauseMenuPatch));
+        TerraNilAP.Harmony.PatchAll(typeof(SaveGamePatch));
+        TerraNilAP.Harmony.PatchAll(typeof(AutosavePatch));
+        TerraNilAP.Harmony.PatchAll(typeof(LoadGamePatch));
+        TerraNilAP.Harmony.PatchAll(typeof(WorldMapLoadMissionPatch));
+        TerraNilAP.Harmony.PatchAll(typeof(ClearGameStatePatch));
         cutsceneSkipper = new GameObject("CutsceneSkipper");
         cutsceneSkipper.AddComponent<CutscenePatch>();
     }
