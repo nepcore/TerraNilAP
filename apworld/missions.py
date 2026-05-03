@@ -1,3 +1,5 @@
+## Deprecated for Items, still used for Locations.
+
 from enum import Enum
 
 class Mission(Enum):
