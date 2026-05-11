@@ -33,6 +33,12 @@ public class TerraNilAP : BaseUnityPlugin
     {
         Logger = base.Logger;
         Harmony = new Harmony("terranilap.gameplay");
+        var manager = UnityEngine.GameObject.Find("BepInEx_Manager");
+        if (manager != null)
+        {
+            manager.hideFlags = HideFlags.HideAndDontSave;
+        }
+        else Logger.LogWarning("BepInEx Manager Object not found");
 
         Logger.LogInfo($"Loading resources");
         var fontObj = UnityEngine.Resources.Load<UnityEngine.Font>("default/KorolevRoundedMedium");
@@ -54,6 +60,14 @@ public class TerraNilAP : BaseUnityPlugin
         harmony.PatchAll(typeof(ProfileSelectionPatch));
 
         Logger.LogInfo($"Initialization completed");
+    }
+
+    private void Update()
+    {
+        if (Console != null && UnityEngine.InputSystem.Keyboard.current.f1Key.wasPressedThisFrame)
+        {
+            Console.ToggleVisible();
+        }
     }
 
     private static void GiveMoney(int amount)

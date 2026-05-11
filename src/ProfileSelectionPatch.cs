@@ -139,6 +139,7 @@ class ProfileSelectionPatch
                     }
                 );
                 TerraNilAP.Console.SetFont(TerraNilAP.Font);
+                TerraNilAP.Console.AddText("<color=green>You can toggle this console by pressing F1</color>");
                 TerraNilAP.Session.MessageLog.OnMessageReceived += TerraNilAP.Console.AddAPMessage;
                 try
                 {
