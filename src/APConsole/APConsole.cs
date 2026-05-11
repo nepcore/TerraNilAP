@@ -48,6 +48,7 @@ public class APConsole
 
     public void SetFont(TMP_FontAsset font)
     {
+        Font = font;
         consoleText.font = font;
     }
 

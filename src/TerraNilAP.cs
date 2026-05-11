@@ -23,6 +23,7 @@ public class TerraNilAP : BaseUnityPlugin
     public static Harmony Harmony;
     public static ArchipelagoSession Session;
     public static HashSet<Mission> Completed;
+    public static long MissionsCompletedToGoal;
     public static Dictionary<Mission, IMissionLogic> MissionLogic = new Dictionary<Mission, IMissionLogic>();
     public static TMP_FontAsset Font;
     public static APConsole.APConsole Console;
@@ -40,7 +41,12 @@ public class TerraNilAP : BaseUnityPlugin
         if (MissionLogic.Count == 0)
         {
             MissionLogic.Add(Mission.TemperateRiver, new RiverValleyLogic());
+            MissionLogic.Add(Mission.TemperateQuarry, new AbandonedQuarryLogic());
+            MissionLogic.Add(Mission.TemperateBay, new PollutedBayLogic());
+            MissionLogic.Add(Mission.TemperateHillAndDale, new HillAndDaleLogic());
             MissionLogic.Add(Mission.TropicalIsland, new DesolateIslandLogic());
+            MissionLogic.Add(Mission.TropicalCaldera, new ScorchedCalderaLogic());
+            MissionLogic.Add(Mission.PolarVolcano, new VolcanicGlacierLogic());
         }
 
         Logger.LogInfo($"Injecting essential patches");
@@ -92,7 +98,8 @@ public class TerraNilAP : BaseUnityPlugin
     public static void MissionCompleted(Mission mission)
     {
         Completed.Add(mission);
-        if (Completed.Count == 2) Session.SetGoalAchieved();
+        Logger.LogInfo($"{mission} completed; {Completed.Count}/{MissionsCompletedToGoal}");
+        if (Completed.Count >= MissionsCompletedToGoal) Session.SetGoalAchieved();
         var toSave = Completed.Select(m => (int) m).Select(m => m.ToString()).Join(delimiter: ",");
         var platform = Utils.MonoSingleton<Global.CampaignStateManager>.Instance.Platform;
         System.IO.File.WriteAllText(System.IO.Path.Combine(platform.ProfileDirectory, "missions.ap"), toSave);
