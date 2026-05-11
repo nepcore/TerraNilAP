@@ -3,3 +3,9 @@
 .cache
 obj
 bin
+.vscode/launch.json
+__pycache__/
+TerraNilAP.sln
+sandbox/
+TerraNilZipArchive.zip
+TerraNil.apworld

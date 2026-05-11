@@ -57,4 +57,4 @@ def connect_regions(world: TerraNilWorld) -> None:
 
     if world.options.climate_goals:
         desolateislandclimate = world.get_region("Desolate Island Climate Goals")
-        desolateislandt1.connect(desolateislandclimate, "Desolate Island Tier 1 to River Valley Climate Goals")
+        desolateislandt1.connect(desolateislandclimate, "Desolate Island Tier 1 to Desolate Island Climate Goals")
