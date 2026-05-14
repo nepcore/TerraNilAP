@@ -169,7 +169,7 @@ buildings_hillanddale_classification, buildings_hillanddale_to_id = \
     generate_building_toclassification_and_toid_dict(HillAndDaleBuildings, map_displayname_to_data["Hill and Dale"])
 buildings_desolateisland_classification, buildings_desolateisland_to_id = \
     generate_building_toclassification_and_toid_dict(DesolateIslandBuildings, map_displayname_to_data["Desolate Island"])
-buildings_scorchedcaldera_classification, buildings_scrochedcaldera_to_id = \
+buildings_scorchedcaldera_classification, buildings_scorchedcaldera_to_id = \
     generate_building_toclassification_and_toid_dict(ScorchedCalderaBuildings, map_displayname_to_data["Scorched Caldera"])
 buildings_volcanicglacier_classification, buildings_volcanicglacier_to_id = \
     generate_building_toclassification_and_toid_dict(VolcanicGlacierBuildings, map_displayname_to_data["Volcanic Glacier"])
@@ -181,7 +181,7 @@ ITEM_NAME_TO_ID: dict[str, int] = \
     buildings_pollutedbay_to_id | \
     buildings_hillanddale_to_id | \
     buildings_desolateisland_to_id | \
-    buildings_scrochedcaldera_to_id | \
+    buildings_scorchedcaldera_to_id | \
     buildings_volcanicglacier_to_id
 
 ITEM_NAME_TO_CLASSIFICATION: dict[str, Any] = \
