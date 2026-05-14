@@ -615,10 +615,10 @@ def set_all_location_rules_volcanic_glacier(world: TerraNilWorld) -> None:
     world.set_rule(world.get_location("Volcanic Glacier - Tier 1 Completed"), greenery)
 
     tundra = tier1 & Has("Volcanic Glacier - Biodome")
-    fire = tundra & energy & Has("Volcanic Glacier - Solar Amplifier")
+    fire = energy & Has("Volcanic Glacier - Solar Amplifier") & (tundra | Has("Volcanic Glacier - Dehumidifier"))
     forest = fire & Has("Volcanic Glacier - Arboretum")
     first_lichen = tier1 & Has("Volcanic Glacier - Algae Greenhouse")
-    lichen = first_lichen & Has("Volcanic Glacier - Radial Excavator")
+    lichen = first_lichen & HasAll("Volcanic Glacier - Radial Excavator", "Volcanic Glacier - Igneous Heatsink")
     kelpforest = first_lichen & Has("Volcanic Glacier - Monorail Node")
 
     world.set_rule(world.get_location("Volcanic Glacier - First Fire"), fire)
@@ -682,11 +682,4 @@ def set_completion_condition(world: TerraNilWorld) -> None:
     world.set_completion_rule(HasFromListUnique(
         *[f"{level} - Liftoff" for level in levels],
         count = world.options.levels_cleared_to_goal.value
-        #"River Valley - Liftoff",
-        #"Abandoned Quarry - Liftoff",
-        #"Polluted Bay - Liftoff",
-        #"Hill and Dale - Liftoff",
-        #"Desolate Island - Liftoff",
-        #"Scorched Caldera - Liftoff",
-        #"Volcanic Glacier - Liftoff",
     ))

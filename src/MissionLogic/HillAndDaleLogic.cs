@@ -161,7 +161,7 @@ class HillAndDaleLogic : IMissionLogic
             TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t2wetland100});
         }
 
-        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Forest) >= (forestTarget * 0.02) && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t2forest1))
+        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Forest) >= (forestTarget * 0.03) && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t2forest1))
         {
             TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t2forest1});
         }
