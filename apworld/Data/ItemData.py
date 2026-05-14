@@ -146,8 +146,8 @@ def generate_building_toclassification_and_toid_dict(source, map: TerraNilMapDat
     buildings_items_dict: dict[str, Literal[ItemClassification.progression]] = dict() # type: ignore
     buildings_toid_dict: dict[str, int] = dict()
     for buildingdata in source:
-        buildings_items_dict[f"{buildingdata} ({map.displayname})"] = (ItemClassification.progression) #TODO: Label correct classification
-        buildings_toid_dict[f"{buildingdata} ({map.displayname})"]  = generate_building_id(map.InternalID, buildingdata.get_internalID(ignore_missing_ids = True))
+        buildings_items_dict[f"{map.displayname} - {buildingdata}"] = (ItemClassification.progression) #TODO: Label correct classification
+        buildings_toid_dict[f"{map.displayname} - {buildingdata}"]  = generate_building_id(map.InternalID, buildingdata.get_internalID(ignore_missing_ids = True))
     return buildings_items_dict, buildings_toid_dict
 
 

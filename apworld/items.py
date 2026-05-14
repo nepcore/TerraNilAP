@@ -168,8 +168,8 @@ ITEM_NAME_TO_CLASSIFICATION |=  filler_toclassification
 
 precollected_names: List[str] = [
     "River Valley Unlock",
-    "Wind Turbine (River Valley)",
-    "Toxin Scrubber (River Valley)",
+    "River Valley - Wind Turbine",
+    "River Valley - Toxin Scrubber",
 ]
 
 
