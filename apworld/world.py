@@ -36,4 +36,4 @@ class TerraNilWorld(World):
         return items.get_filler_item_name(self)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        return self.options.as_dict("climate_goals")
+        return self.options.as_dict("climate_goals", "levels_cleared_to_goal")

@@ -23,14 +23,14 @@ class TerraNilMapData:
 
     def __str__(self) -> str:
         return self.displayname
-    
+
     def __int__(self) -> int:
         return self.InternalID
-    
+
     def read_data(self) -> str:
         "Provides a human-readable oversight of the stored data."
         return f"Map {self.displayname} of region {self.region} with internal ID {self.InternalID}"
-    
+
 
 RiverValleyData =            TerraNilMapData(displayname = "River Valley",          region = "Temperate", InternalID = 10)
 AbandonedQuarryData =        TerraNilMapData(displayname = "Abandoned Quarry",      region = "Temperate", InternalID = 11)
@@ -56,15 +56,15 @@ FrackedFloodplainData =      TerraNilMapData(displayname = "Fracked Floodplain",
 
 map_displayname_to_data: dict[str, TerraNilMapData] = {
     "River Valley":          RiverValleyData,
-    # "Abandoned Quarry":      AbandonedQuarryData,
-    # "Polluted Bay":          PollutedBayData,
-    # "Hill and Dale":         HillandDaleData,
+    "Abandoned Quarry":      AbandonedQuarryData,
+    "Polluted Bay":          PollutedBayData,
+    "Hill and Dale":         HillandDaleData,
 
     "Desolate Island":       DesolateIslandData,
     # "Archipelago":           ArchipelagoData,
-    # "Scorched Caldera":      ScorchedCalderaData,
+    "Scorched Caldera":      ScorchedCalderaData,
 
-    # "Volcanic Glacier":      VolcanicGlacierData,
+    "Volcanic Glacier":      VolcanicGlacierData,
     # "Polluted Fjord":        PollutedFjordData,
     # "Subpolar River":        SubpolarRiverData,
 
@@ -107,7 +107,7 @@ def generate_mapunlock_id(map_id: int) -> int:
     """
     Constructs an ID for a given building based on it's region id, tier, and the slot number.
 
-    The ID is a 32-bit integer. 
+    The ID is a 32-bit integer.
     The first bit is always 1.
     The next bit denotes that this item is a building or map unlock, and will be set to 1.
     The next 7 bits denote other use cases, which are thus unset.
@@ -126,7 +126,7 @@ def generate_building_id(map_id: int, slot_number: int) -> int:
     """
     Constructs an ID for a given building based on it's region id, tier, and the slot number.
 
-    The ID is a 32-bit integer. 
+    The ID is a 32-bit integer.
     The first bit is always 1.
     The second bit denotes that this item is a building or map unlock, and will be set to 1.
     The next 6 bits denote other use cases, which are thus unset.
@@ -146,56 +146,86 @@ def generate_building_toclassification_and_toid_dict(source, map: TerraNilMapDat
     buildings_items_dict: dict[str, Literal[ItemClassification.progression]] = dict() # type: ignore
     buildings_toid_dict: dict[str, int] = dict()
     for buildingdata in source:
-        buildings_items_dict[f"{map.displayname} {buildingdata}"] = (ItemClassification.progression) #TODO: Label correct classification
-        buildings_toid_dict[f"{map.displayname} {buildingdata}"]  = generate_building_id(map.InternalID, buildingdata.get_internalID(ignore_missing_ids = True))
+        buildings_items_dict[f"{buildingdata} ({map.displayname})"] = (ItemClassification.progression) #TODO: Label correct classification
+        buildings_toid_dict[f"{buildingdata} ({map.displayname})"]  = generate_building_id(map.InternalID, buildingdata.get_internalID(ignore_missing_ids = True))
     return buildings_items_dict, buildings_toid_dict
 
 
 maps_classification: dict[str, ItemClassification] = dict()
 for displayname in map_displayname_to_data.keys():
-    maps_classification[f"{displayname} Map"] = (ItemClassification.progression)
-    
-maps_to_id = {
-    f"{displayname} Map": generate_mapunlock_id(map_id=data.InternalID) for displayname, data in map_displayname_to_data.items()
-}
-    
-buildings_rivervalley_classification, buildings_rivervalley_to_id = generate_building_toclassification_and_toid_dict(RiverValleyBuildings, map_displayname_to_data["River Valley"])
-buildings_desolateisland_classification, buildings_desolateisland_to_id = generate_building_toclassification_and_toid_dict(DesolateIslandBuildings, map_displayname_to_data["Desolate Island"])
+    maps_classification[f"{displayname} Unlock"] = (ItemClassification.progression)
 
-buildings_rivervalley_to_id = {
-    f"River Valley {str(x)}" : generate_building_id(get_map_id("River Valley"), int(x)) for x in RiverValleyBuildings
+maps_to_id = {
+    f"{displayname} Unlock": generate_mapunlock_id(map_id=data.InternalID) for displayname, data in map_displayname_to_data.items()
 }
+
+buildings_rivervalley_classification, buildings_rivervalley_to_id = \
+    generate_building_toclassification_and_toid_dict(RiverValleyBuildings, map_displayname_to_data["River Valley"])
+buildings_abandonedquarry_classification, buildings_abandonedquarry_to_id = \
+    generate_building_toclassification_and_toid_dict(AbandonedQuarryBuildings, map_displayname_to_data["Abandoned Quarry"])
+buildings_pollutedbay_classification, buildings_pollutedbay_to_id = \
+    generate_building_toclassification_and_toid_dict(PollutedBayBuildings, map_displayname_to_data["Polluted Bay"])
+buildings_hillanddale_classification, buildings_hillanddale_to_id = \
+    generate_building_toclassification_and_toid_dict(HillAndDaleBuildings, map_displayname_to_data["Hill and Dale"])
+buildings_desolateisland_classification, buildings_desolateisland_to_id = \
+    generate_building_toclassification_and_toid_dict(DesolateIslandBuildings, map_displayname_to_data["Desolate Island"])
+buildings_scorchedcaldera_classification, buildings_scrochedcaldera_to_id = \
+    generate_building_toclassification_and_toid_dict(ScorchedCalderaBuildings, map_displayname_to_data["Scorched Caldera"])
+buildings_volcanicglacier_classification, buildings_volcanicglacier_to_id = \
+    generate_building_toclassification_and_toid_dict(VolcanicGlacierBuildings, map_displayname_to_data["Volcanic Glacier"])
 
 ITEM_NAME_TO_ID: dict[str, int] = \
     maps_to_id | \
+    buildings_rivervalley_to_id | \
+    buildings_abandonedquarry_to_id | \
+    buildings_pollutedbay_to_id | \
+    buildings_hillanddale_to_id | \
     buildings_desolateisland_to_id | \
-    buildings_rivervalley_to_id
-    
+    buildings_scrochedcaldera_to_id | \
+    buildings_volcanicglacier_to_id
+
 ITEM_NAME_TO_CLASSIFICATION: dict[str, Any] = \
     maps_classification | \
     buildings_rivervalley_classification | \
-    buildings_desolateisland_classification
+    buildings_abandonedquarry_classification | \
+    buildings_pollutedbay_classification | \
+    buildings_hillanddale_classification | \
+    buildings_desolateisland_classification | \
+    buildings_scorchedcaldera_classification | \
+    buildings_volcanicglacier_classification
 
 def main():
-    # print("Map items:")
-    # for key, value in maps_as_items.items():
-    #     print(f"{key:<32}")
-        
     print("\nMap IDs:")
     for key, value in maps_to_id.items():
         print(f"{key:<32}: 0b {value:b}, 0x{value:x}")
-        
-    # print("\nRiver Valley Buildings items:")
-    # for key, value in buildings_rivervalley_as_items.items():
-    #     print(f"{key:<32}")
-        
+
     print("\nRiver Valley Buildings IDs:")
     for key, value in buildings_rivervalley_to_id.items():
         print(f"{key:<32}: 0b {value:b}, 0x{value:x}")
-        
-    print("\nRiver Valley Buildings IDs:")
+
+    print("\nAbandoned Quarry Buildings IDs:")
+    for key, value in buildings_abandonedquarry_to_id.items():
+        print(f"{key:<32}: 0b {value:b}, 0x{value:x}")
+
+    print("\nPolluted Bay Buildings IDs:")
+    for key, value in buildings_pollutedbay_to_id.items():
+        print(f"{key:<32}: 0b {value:b}, 0x{value:x}")
+
+    print("\nHill and Dale Buildings IDs:")
+    for key, value in buildings_hillanddale_to_id.items():
+        print(f"{key:<32}: 0b {value:b}, 0x{value:x}")
+
+    print("\nDesolate Island Buildings IDs:")
     for key, value in buildings_desolateisland_to_id.items():
         print(f"{key:<32}: 0b {value:b}, 0x{value:x}")
-        
+
+    print("\nScorched Caldera Buildings IDs:")
+    for key, value in buildings_scorchedcaldera_to_id.items():
+        print(f"{key:<32}: 0b {value:b}, 0x{value:x}")
+
+    print("\nVolcanic Glacier Buildings IDs:")
+    for key, value in buildings_volcanicglacier_to_id.items():
+        print(f"{key:<32}: 0b {value:b}, 0x{value:x}")
+
 if __name__ == "__main__":
     main()

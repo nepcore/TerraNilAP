@@ -15,6 +15,7 @@ public class APConsole
     private Func<Scene, Scene, bool> shouldRender;
     private AssetBundle AssetBundle;
     private TMP_FontAsset Font;
+    private bool visible = true;
 
     public APConsole(
         AssetBundle assetBundle,
@@ -37,6 +38,7 @@ public class APConsole
     {
         if (console != null) GameObject.DestroyImmediate(console);
         console = GameObject.Instantiate(AssetBundle.LoadAsset<GameObject>("APConsole"));
+        console.SetActive(visible);
 
         consoleText = console.transform.Find("Scroll View/Viewport/Content").gameObject.AddComponent<TextMeshProUGUI>();
         if (history != null) consoleText.text = history;
@@ -49,6 +51,12 @@ public class APConsole
     public void SetFont(TMP_FontAsset font)
     {
         consoleText.font = font;
+    }
+
+    public void ToggleVisible()
+    {
+        visible = !visible;
+        if (console != null) console.SetActive(visible);
     }
 
     private static System.Threading.Mutex mutex = new System.Threading.Mutex();

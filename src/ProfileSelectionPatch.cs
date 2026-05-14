@@ -80,6 +80,8 @@ class ProfileSelectionPatch
         TerraNilAP.Harmony.PatchAll(typeof(LoadGamePatch));
         TerraNilAP.Harmony.PatchAll(typeof(WorldMapLoadMissionPatch));
         TerraNilAP.Harmony.PatchAll(typeof(ClearGameStatePatch));
+        TerraNilAP.Harmony.PatchAll(typeof(ExecuteSceneLoadPatch));
+        TerraNilAP.Harmony.PatchAll(typeof(AirshipIntroPatch));
         cutsceneSkipper = new GameObject("CutsceneSkipper");
         cutsceneSkipper.AddComponent<CutscenePatch>();
     }
@@ -137,6 +139,7 @@ class ProfileSelectionPatch
                     }
                 );
                 TerraNilAP.Console.SetFont(TerraNilAP.Font);
+                TerraNilAP.Console.AddText("<color=green>You can toggle this console by pressing F1</color>");
                 TerraNilAP.Session.MessageLog.OnMessageReceived += TerraNilAP.Console.AddAPMessage;
                 try
                 {
@@ -184,6 +187,22 @@ class ProfileSelectionPatch
                             };
                             InjectPatches();
                             TerraNilAP.Logger.LogInfo("Connection successful");
+
+                            long clearsNeeded = 7;
+                            switch (login.SlotData.GetValueSafe("levels_cleared_to_goal"))
+                            {
+                                case long n:
+                                    clearsNeeded = n;
+                                    break;
+                                default:
+                                    MonoSingleton<MessageHandler>.Instance.CreateConfirmationDialog(
+                                        "Warning",
+                                        $"Failed to find the number of levels cleared to goal in slot data, assuming {clearsNeeded} instead"
+                                    );
+                                    break;
+                            }
+                            TerraNilAP.MissionsCompletedToGoal = clearsNeeded;
+
                             var platform = MonoSingleton<CampaignStateManager>.Instance.Platform;
                             TerraNilAP.Completed = new();
                             if (System.IO.File.Exists(System.IO.Path.Combine(platform.ProfileDirectory, "missions.ap")))
