@@ -25,7 +25,8 @@ def set_all_entrance_rules(world: TerraNilWorld) -> None:
         world.set_rule(world.get_entrance(f"World Map to {level} Tier 1"), Has(f"{level} Unlock"))
         world.set_rule(world.get_entrance(f"{level} Tier 1 to {level} Tier 2"), Has(f"{level} - Tier 1 Completed"))
         world.set_rule(world.get_entrance(f"{level} Tier 2 to {level} Tier 3"), Has(f"{level} - Tier 2 Completed"))
-        world.set_rule(world.get_entrance(f"{level} Tier 3 to World Map"), Has(f"{level} - Liftoff"))
+        #world.set_rule(world.get_entrance(f"{level} Tier 3 to World Map"), Has(f"{level} - Liftoff"))
+        world.set_rule(world.get_entrance(f"{world.starting_level} Tier 2 to World Map"), Has(f"{world.starting_level} - Tier 2 Completed"))
 
     if world.options.climate_goals:
         rivervalley_climate = world.get_entrance("River Valley Tier 2 to River Valley Climate Goals")
@@ -93,13 +94,6 @@ def set_all_location_rules_river_valley(world: TerraNilWorld) -> None:
 
     world.set_rule(world.get_location("River Valley - Tier 2 Completed"), fynbos & wetlands & forest)
 
-    photos = tier2 & HasAll("River Valley - Animal Observatory", "River Valley - Wildlife Bridge", "River Valley - Sonic Pulse")
-    world.set_rule(world.get_location("River Valley - 3 Photo Stars"), photos)
-    world.set_rule(world.get_location("River Valley - 10 Photo Stars"), photos)
-    world.set_rule(world.get_location("River Valley - Bronze Photo"), photos)
-    world.set_rule(world.get_location("River Valley - Silver Photo"), photos)
-    world.set_rule(world.get_location("River Valley - Gold Photo"), photos)
-
     recyclingbase = tier2 & (
         HasAll(
             "River Valley - Airship",
@@ -119,6 +113,13 @@ def set_all_location_rules_river_valley(world: TerraNilWorld) -> None:
 
     world.set_rule(world.get_location("River Valley - First Recycling"), recyclingbase)
     world.set_rule(world.get_location("River Valley - Recycling Completed"), recyclingfull)
+
+    photos = tier2 & HasAll("River Valley - Animal Observatory", "River Valley - Wildlife Bridge", "River Valley - Sonic Pulse")
+    world.set_rule(world.get_location("River Valley - 3 Photo Stars"), photos)
+    world.set_rule(world.get_location("River Valley - 10 Photo Stars"), recyclingbase & photos)
+    world.set_rule(world.get_location("River Valley - Bronze Photo"), photos)
+    world.set_rule(world.get_location("River Valley - Silver Photo"), photos)
+    world.set_rule(world.get_location("River Valley - Gold Photo"), recyclingbase & photos)
 
     world.set_rule(world.get_location("River Valley - Liftoff"), photos & recyclingfull)
 
@@ -151,15 +152,17 @@ def set_all_location_rules_abandoned_quarry(world: TerraNilWorld) -> None:
     lava = Has("Abandoned Quarry - Seismic Detonator")
     water = energy & Has("Abandoned Quarry - Water Pump")
     pollution = energy & Has("Abandoned Quarry - Toxin Scrubber")
-    greenery = pollution & Has("Abandoned Quarry - Irrigator")
+    first_greenery = pollution & Has("Abandoned Quarry - Irrigator")
+    #requiring lava to get power to the center of the level for toxin scrubbers
+    greenery = first_greenery & lava
 
     world.set_rule(world.get_location("Abandoned Quarry - First Energy"), energy)
     world.set_rule(world.get_location("Abandoned Quarry - First Pollution Removed"), pollution)
-    world.set_rule(world.get_location("Abandoned Quarry - First Greenery"), water | greenery)
+    world.set_rule(world.get_location("Abandoned Quarry - First Greenery"), water | first_greenery)
     world.set_rule(world.get_location("Abandoned Quarry - First Water"), water)
     world.set_rule(world.get_location("Abandoned Quarry - First Lava"), lava)
 
-    world.set_rule(world.get_location("Abandoned Quarry - Greenery 25%"), greenery)
+    world.set_rule(world.get_location("Abandoned Quarry - Greenery 25%"), first_greenery)
     world.set_rule(world.get_location("Abandoned Quarry - Greenery 50%"), greenery)
     world.set_rule(world.get_location("Abandoned Quarry - Greenery 75%"), greenery)
     world.set_rule(world.get_location("Abandoned Quarry - Greenery 100%"), greenery)
@@ -178,14 +181,6 @@ def set_all_location_rules_abandoned_quarry(world: TerraNilWorld) -> None:
     world.set_rule(world.get_location("Abandoned Quarry - First Wetlands"), wetlands)
     world.set_rule(world.get_location("Abandoned Quarry - Wetlands Completed"), wetlands)
     world.set_rule(world.get_location("Abandoned Quarry - Tier 2 Completed"), fynbos & forest & wetlands)
-
-    photos = tier2 & Has("Abandoned Quarry - Animal Observatory")
-
-    world.set_rule(world.get_location("Abandoned Quarry - 3 Photo Stars"), photos)
-    world.set_rule(world.get_location("Abandoned Quarry - 10 Photo Stars"), photos)
-    world.set_rule(world.get_location("Abandoned Quarry - Bronze Photo"), photos)
-    world.set_rule(world.get_location("Abandoned Quarry - Silver Photo"), photos)
-    world.set_rule(world.get_location("Abandoned Quarry - Gold Photo"), photos)
 
     recyclingbase = tier2 & (
         HasAll(
@@ -207,6 +202,13 @@ def set_all_location_rules_abandoned_quarry(world: TerraNilWorld) -> None:
 
     world.set_rule(world.get_location("Abandoned Quarry - First Recycling"), recyclingbase)
     world.set_rule(world.get_location("Abandoned Quarry - Recycling Completed"), recyclingfull)
+
+    photos = tier2 & Has("Abandoned Quarry - Animal Observatory")
+    world.set_rule(world.get_location("Abandoned Quarry - 3 Photo Stars"), photos)
+    world.set_rule(world.get_location("Abandoned Quarry - 10 Photo Stars"), recyclingbase & photos & Has("Abandoned Quarry - Wildlife Bridge"))
+    world.set_rule(world.get_location("Abandoned Quarry - Bronze Photo"), photos)
+    world.set_rule(world.get_location("Abandoned Quarry - Silver Photo"), photos)
+    world.set_rule(world.get_location("Abandoned Quarry - Gold Photo"), recyclingbase & photos)
 
     world.set_rule(world.get_location("Abandoned Quarry - Liftoff"), photos & recyclingfull)
 
@@ -266,14 +268,6 @@ def set_all_location_rules_polluted_bay(world: TerraNilWorld) -> None:
     world.set_rule(world.get_location("Polluted Bay - Deciduous Forest Completed"), deciduousforest)
     world.set_rule(world.get_location("Polluted Bay - Tier 2 Completed"), fynbos & forest & wetlands & deciduousforest)
 
-    photos = tier2 & Has("Polluted Bay - Animal Observatory")
-
-    world.set_rule(world.get_location("Polluted Bay - 3 Photo Stars"), photos)
-    world.set_rule(world.get_location("Polluted Bay - 10 Photo Stars"), photos)
-    world.set_rule(world.get_location("Polluted Bay - Bronze Photo"), photos)
-    world.set_rule(world.get_location("Polluted Bay - Silver Photo"), photos)
-    world.set_rule(world.get_location("Polluted Bay - Gold Photo"), photos)
-
     recyclingbase = tier2 & (
         HasAll(
             "Polluted Bay - Airship",
@@ -292,6 +286,13 @@ def set_all_location_rules_polluted_bay(world: TerraNilWorld) -> None:
 
     world.set_rule(world.get_location("Polluted Bay - First Recycling"), recyclingbase)
     world.set_rule(world.get_location("Polluted Bay - Recycling Completed"), recyclingfull)
+
+    photos = tier2 & Has("Polluted Bay - Animal Observatory")
+    world.set_rule(world.get_location("Polluted Bay - 3 Photo Stars"), photos)
+    world.set_rule(world.get_location("Polluted Bay - 10 Photo Stars"), recyclingbase & photos)
+    world.set_rule(world.get_location("Polluted Bay - Bronze Photo"), photos)
+    world.set_rule(world.get_location("Polluted Bay - Silver Photo"), photos)
+    world.set_rule(world.get_location("Polluted Bay - Gold Photo"), recyclingbase & photos)
 
     world.set_rule(world.get_location("Polluted Bay - Liftoff"), photos & recyclingfull)
 
@@ -352,14 +353,6 @@ def set_all_location_rules_hill_and_dale(world: TerraNilWorld) -> None:
     world.set_rule(world.get_location("Hill and Dale - Rocky Scrublands Completed"), rockyscrubland)
     world.set_rule(world.get_location("Hill and Dale - Tier 2 Completed"), fynbos & forest & wetlands & rockyscrubland)
 
-    photos = tier2 & Has("Hill and Dale - Animal Observatory")
-
-    world.set_rule(world.get_location("Hill and Dale - 3 Photo Stars"), photos)
-    world.set_rule(world.get_location("Hill and Dale - 10 Photo Stars"), photos)
-    world.set_rule(world.get_location("Hill and Dale - Bronze Photo"), photos)
-    world.set_rule(world.get_location("Hill and Dale - Silver Photo"), photos)
-    world.set_rule(world.get_location("Hill and Dale - Gold Photo"), photos)
-
     recyclingbase = tier2 & (
         HasAll(
             "Hill and Dale - Airship",
@@ -379,6 +372,13 @@ def set_all_location_rules_hill_and_dale(world: TerraNilWorld) -> None:
 
     world.set_rule(world.get_location("Hill and Dale - First Recycling"), recyclingbase)
     world.set_rule(world.get_location("Hill and Dale - Recycling Completed"), recyclingfull)
+
+    photos = tier2 & Has("Hill and Dale - Animal Observatory")
+    world.set_rule(world.get_location("Hill and Dale - 3 Photo Stars"), photos)
+    world.set_rule(world.get_location("Hill and Dale - 10 Photo Stars"), recyclingbase & photos)
+    world.set_rule(world.get_location("Hill and Dale - Bronze Photo"), photos)
+    world.set_rule(world.get_location("Hill and Dale - Silver Photo"), photos)
+    world.set_rule(world.get_location("Hill and Dale - Gold Photo"), recyclingbase & photos)
 
     world.set_rule(world.get_location("Hill and Dale - Liftoff"), photos & recyclingfull)
 
@@ -403,7 +403,7 @@ def set_all_location_rules_hill_and_dale(world: TerraNilWorld) -> None:
             "Hill and Dale - Waterlilies Blossom",
             "Hill and Dale - Rains Begin",
         ]:
-            world.set_rule(world.get_location(goal), humidity & temperature)
+            world.set_rule(world.get_location(goal), humidity & temperature & Has("Hill and Dale - Recycling Silo"))
 
 def set_all_location_rules_desolate_island(world: TerraNilWorld) -> None:
     tier1 = Has("Desolate Island - Tier 1 Completed")
@@ -460,13 +460,6 @@ def set_all_location_rules_desolate_island(world: TerraNilWorld) -> None:
 
     world.set_rule(world.get_location("Desolate Island - Tier 2 Completed"), beach & full_mangrove & rainforest & coralreef)
 
-    photos = tier2 & HasAll("Desolate Island - Animal Observatory", "Desolate Island - Sonic Pulse")
-    world.set_rule(world.get_location("Desolate Island - 3 Photo Stars"), photos)
-    world.set_rule(world.get_location("Desolate Island - 10 Photo Stars"), photos)
-    world.set_rule(world.get_location("Desolate Island - Bronze Photo"), photos)
-    world.set_rule(world.get_location("Desolate Island - Silver Photo"), photos)
-    world.set_rule(world.get_location("Desolate Island - Gold Photo"), photos)
-
     recyclingbase = tier2 & (
         HasAll(
             "Desolate Island - Airship",
@@ -485,6 +478,13 @@ def set_all_location_rules_desolate_island(world: TerraNilWorld) -> None:
 
     world.set_rule(world.get_location("Desolate Island - First Recycling"), recyclingbase)
     world.set_rule(world.get_location("Desolate Island - Recycling Completed"), recyclingfull)
+
+    photos = tier2 & HasAll("Desolate Island - Animal Observatory", "Desolate Island - Sonic Pulse")
+    world.set_rule(world.get_location("Desolate Island - 3 Photo Stars"), photos)
+    world.set_rule(world.get_location("Desolate Island - 10 Photo Stars"), recyclingbase & photos)
+    world.set_rule(world.get_location("Desolate Island - Bronze Photo"), photos)
+    world.set_rule(world.get_location("Desolate Island - Silver Photo"), photos)
+    world.set_rule(world.get_location("Desolate Island - Gold Photo"), recyclingbase & photos)
 
     world.set_rule(world.get_location("Desolate Island - Liftoff"), photos & recyclingfull)
 
@@ -554,13 +554,6 @@ def set_all_location_rules_scorched_caldera(world: TerraNilWorld) -> None:
     world.set_rule(world.get_location("Scorched Caldera - Lake Vegetation Completed"), lakevegetation)
     world.set_rule(world.get_location("Scorched Caldera - Tier 2 Completed"), bamboo & tropicalforest & lakevegetation)
 
-    photos = tier2 & HasAll("Scorched Caldera - Animal Observatory", "Scorched Caldera - Sonic Pulse")
-    world.set_rule(world.get_location("Scorched Caldera - 3 Photo Stars"), photos)
-    world.set_rule(world.get_location("Scorched Caldera - 10 Photo Stars"), photos)
-    world.set_rule(world.get_location("Scorched Caldera - Bronze Photo"), photos)
-    world.set_rule(world.get_location("Scorched Caldera - Silver Photo"), photos)
-    world.set_rule(world.get_location("Scorched Caldera - Gold Photo"), photos)
-
     recyclingbase = tier2 & (
         HasAll(
             "Scorched Caldera - Airship",
@@ -578,6 +571,13 @@ def set_all_location_rules_scorched_caldera(world: TerraNilWorld) -> None:
 
     world.set_rule(world.get_location("Scorched Caldera - First Recycling"), recyclingbase)
     world.set_rule(world.get_location("Scorched Caldera - Recycling Completed"), recyclingfull)
+
+    photos = tier2 & HasAll("Scorched Caldera - Animal Observatory", "Scorched Caldera - Sonic Pulse")
+    world.set_rule(world.get_location("Scorched Caldera - 3 Photo Stars"), photos)
+    world.set_rule(world.get_location("Scorched Caldera - 10 Photo Stars"), recyclingbase & photos)
+    world.set_rule(world.get_location("Scorched Caldera - Bronze Photo"), photos)
+    world.set_rule(world.get_location("Scorched Caldera - Silver Photo"), photos)
+    world.set_rule(world.get_location("Scorched Caldera - Gold Photo"), recyclingbase & photos)
 
     world.set_rule(world.get_location("Scorched Caldera - Liftoff"), photos & recyclingfull)
 
@@ -632,14 +632,6 @@ def set_all_location_rules_volcanic_glacier(world: TerraNilWorld) -> None:
     world.set_rule(world.get_location("Volcanic Glacier - Kelp Forest Completed"), kelpforest)
     world.set_rule(world.get_location("Volcanic Glacier - Tier 2 Completed"), tundra & forest & lichen & kelpforest)
 
-    photos = tier2 & Has("Volcanic Glacier - Animal Observatory")
-
-    world.set_rule(world.get_location("Volcanic Glacier - 3 Photo Stars"), photos)
-    world.set_rule(world.get_location("Volcanic Glacier - 10 Photo Stars"), photos)
-    world.set_rule(world.get_location("Volcanic Glacier - Bronze Photo"), photos)
-    world.set_rule(world.get_location("Volcanic Glacier - Silver Photo"), photos)
-    world.set_rule(world.get_location("Volcanic Glacier - Gold Photo"), photos)
-
     recyclingbase = tier2 & (
         HasAll(
             "Volcanic Glacier - Airship",
@@ -659,6 +651,13 @@ def set_all_location_rules_volcanic_glacier(world: TerraNilWorld) -> None:
     world.set_rule(world.get_location("Volcanic Glacier - First Recycling"), recyclingbase)
     world.set_rule(world.get_location("Volcanic Glacier - Recycling Completed"), recyclingfull)
 
+    photos = tier2 & Has("Volcanic Glacier - Animal Observatory")
+    world.set_rule(world.get_location("Volcanic Glacier - 3 Photo Stars"), photos)
+    world.set_rule(world.get_location("Volcanic Glacier - 10 Photo Stars"), recyclingbase & photos)
+    world.set_rule(world.get_location("Volcanic Glacier - Bronze Photo"), photos)
+    world.set_rule(world.get_location("Volcanic Glacier - Silver Photo"), photos)
+    world.set_rule(world.get_location("Volcanic Glacier - Gold Photo"), recyclingbase & photos)
+
     world.set_rule(world.get_location("Volcanic Glacier - Liftoff"), photos & recyclingfull)
 
     if world.options.climate_goals:
@@ -669,12 +668,12 @@ def set_all_location_rules_volcanic_glacier(world: TerraNilWorld) -> None:
         world.set_rule(world.get_location("Volcanic Glacier - Snow Melts"), temperature)
         world.set_rule(world.get_location("Volcanic Glacier - Fungi In Forests"), humidity)
         world.set_rule(world.get_location("Volcanic Glacier - Pelagic Fish"), radiation)
-        world.set_rule(world.get_location("Volcanic Glacier - Aurora"), radiation)
+        world.set_rule(world.get_location("Volcanic Glacier - Aurora"), humidity & temperature & radiation)
         world.set_rule(world.get_location("Volcanic Glacier - Migratory Birds Return"), temperature & radiation)
         world.set_rule(world.get_location("Volcanic Glacier - Icebergs Form"), temperature & radiation)
         world.set_rule(world.get_location("Volcanic Glacier - Butterflies"), temperature & radiation)
         world.set_rule(world.get_location("Volcanic Glacier - Moss On Boulders"), humidity & temperature)
-        world.set_rule(world.get_location("Volcanic Glacier - Ivy Overgrowth"), humidity & temperature)
+        world.set_rule(world.get_location("Volcanic Glacier - Ivy Overgrowth"), humidity & temperature & recyclingbase)
         world.set_rule(world.get_location("Volcanic Glacier - Moss On Rock Faces"), humidity & temperature)
         world.set_rule(world.get_location("Volcanic Glacier - Snowfall Begins"), humidity & temperature & radiation)
 
