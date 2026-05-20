@@ -82,6 +82,7 @@ class ProfileSelectionPatch
         TerraNilAP.Harmony.PatchAll(typeof(ClearGameStatePatch));
         TerraNilAP.Harmony.PatchAll(typeof(ExecuteSceneLoadPatch));
         TerraNilAP.Harmony.PatchAll(typeof(AirshipIntroPatch));
+        TerraNilAP.Harmony.PatchAll(typeof(DifficultySelectionPatch));
         cutsceneSkipper = new GameObject("CutsceneSkipper");
         cutsceneSkipper.AddComponent<CutscenePatch>();
     }
@@ -166,10 +167,27 @@ class ProfileSelectionPatch
                             if (MonoSingleton<CampaignStateManager>.Instance.LoadPlayerProfile(profileName) == null)
                             {
                                 MonoSingleton<CampaignStateManager>.Instance.CreateAndAssignNewProfile(profileName);
+                                //var dsp = new View.UiHelpers.Panels.DifficultySelectPanel();
+                                var diff = 2L;
+                                switch (login.SlotData.GetValueSafe("game_difficulty"))
+                                {
+                                    case long n:
+                                        diff = n;
+                                        break;
+                                    default:
+                                        MonoSingleton<MessageHandler>.Instance.CreateConfirmationDialog(
+                                            "Warning",
+                                            $"Failed to find the selected difficulty in slot data, assuming Ecologist"
+                                        );
+                                        break;
+                                }
+                                TerraNilAP.Logger.LogInfo($"difficulty is {diff}");
+                                DifficultySelectionPatch.Difficulty = (int) diff;
+
                             }
-                                MonoSingleton<ProfileSelectionHandler>.Instance.UpdateAllProfileLanguages();
+                            MonoSingleton<ProfileSelectionHandler>.Instance.UpdateAllProfileLanguages();
                             var profileState = MonoSingleton<CampaignStateManager>.Instance.LoadPlayerProfile(profileName);
-                            //profileState.difficultyState.hasSelectedDifficulty = true;
+                            profileState.difficultyState.hasSelectedDifficulty = true;
                             profileState.hasPlayedTutorial = true;
                             profileState.hasPlayedClimateTutorial = true;
                             profileState.hasPlayedAnimalTutorialIntro = true;

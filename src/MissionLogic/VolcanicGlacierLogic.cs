@@ -155,7 +155,7 @@ class VolcanicGlacierLogic : IMissionLogic
             TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t2forest100});
         }
 
-        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Lichen) >= (lichenTarget * 0.02) && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t2lichen1))
+        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Lichen) >= (lichenTarget * 0.01) && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t2lichen1))
         {
             TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t2lichen1});
         }
@@ -165,7 +165,7 @@ class VolcanicGlacierLogic : IMissionLogic
             TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t2lichen100});
         }
 
-        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Kelp) >= (kelpForestTarget * 0.02) && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t2kelpForest1))
+        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Kelp) >= (kelpForestTarget * 0.01) && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t2kelpForest1))
         {
             TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t2kelpForest1});
         }
@@ -198,7 +198,7 @@ class VolcanicGlacierLogic : IMissionLogic
         var missionData = (MissionData)state.climateState.GetType().GetField("_mission", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(state.climateState);
         foreach (var cond in missionData.climateData.climateConditions)
         {
-            if (cond.Evaluate(state.climateState))
+            if (state.climateState.ClimateBlackboard.GetValue(cond.keyWhenTrue))
             {
                 var id = names.GetValueSafe(cond.keyWhenTrue);
                 if (TerraNilAP.Session.Locations.AllMissingLocations.Contains(id))

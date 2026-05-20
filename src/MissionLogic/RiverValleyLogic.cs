@@ -191,7 +191,7 @@ class RiverValleyLogic : IMissionLogic
             var missionData = (MissionData)state.climateState.GetType().GetField("_mission", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(state.climateState);
             foreach (var cond in missionData.climateData.climateConditions)
             {
-                if (cond.Evaluate(state.climateState))
+                if (state.climateState.ClimateBlackboard.GetValue(cond.keyWhenTrue))
                 {
                     var id = names.GetValueSafe(cond.keyWhenTrue);
                     if (TerraNilAP.Session.Locations.AllMissingLocations.Contains(id))

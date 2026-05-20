@@ -36,4 +36,30 @@ class TerraNilWorld(World):
         return items.get_filler_item_name(self)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        return self.options.as_dict("climate_goals", "levels_cleared_to_goal")
+        return self.options.as_dict("climate_goals", "levels_cleared_to_goal", "game_difficulty")
+
+    def generate_early(self) -> None:
+        temperate = ["River Valley", "Hill and Dale", "Polluted Bay", "Abandoned Quarry"]
+        tropical = ["Desolate Island", "Scorched Caldera"]
+        polar = ["Volcanic Glacier"]
+
+        starting_level = self.options.starting_level.current_option_name
+        if self.options.starting_level == "any":
+            starting_level = self.random.choice(temperate + tropical + polar)
+        if self.options.starting_level == "random_temperate":
+            starting_level = self.random.choice(temperate)
+        if self.options.starting_level == "random_tropical":
+            starting_level = self.random.choice(tropical)
+        if self.options.starting_level == "random_polar":
+            starting_level = self.random.choice(polar)
+        #if self.options.starting_level == "random_continental":
+        #    starting_level = self.random.choice([])
+        #if self.options.starting_level == "random_arid":
+        #    starting_level = self.random.choice([])
+
+        # option names are converted to title case by core AP
+        # so we need to manually make things match sometimes
+        if starting_level == "Hill And Dale":
+            starting_level = "Hill and Dale"
+
+        self.starting_level = starting_level

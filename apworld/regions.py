@@ -39,7 +39,11 @@ def create_regions_for_level(world: TerraNilWorld, level: str) -> None:
 def connect_regions(world: TerraNilWorld) -> None:
     menu = world.get_region("Menu")
     worldmap = world.get_region("World Map")
-    menu.connect(world.get_region("River Valley Tier 1"), "Menu to River Valley Tier 1")
+    t1 = world.get_region(f"{world.starting_level} Tier 1")
+    t2 = world.get_region(f"{world.starting_level} Tier 2")
+    menu.connect(t1, f"Menu to {world.starting_level} Tier 1")
+    t2.connect(worldmap, f"{world.starting_level} Tier 2 to World Map")
+    #menu.connect(world.get_region("River Valley Tier 1"), "Menu to River Valley Tier 1")
 
     for level in levels:
         connect_regions_for_level(world, level)
@@ -53,10 +57,8 @@ def connect_regions_for_level(world: TerraNilWorld, level: str) -> None:
     worldmap.connect(t1, f"World Map to {level} Tier 1")
     t1.connect(t2, f"{level} Tier 1 to {level} Tier 2")
     t2.connect(t3, f"{level} Tier 2 to {level} Tier 3")
-    t3.connect(worldmap, f"{level} Tier 3 to World Map")
+    #t3.connect(worldmap, f"{level} Tier 3 to World Map")
 
     if world.options.climate_goals:
         climate = world.get_region(f"{level} Climate Goals")
-        source = t2 if level == "River Valley" else t1
-        climate_tier = 2 if level == "River Valley" else 1
-        source.connect(climate, f"{level} Tier {climate_tier} to {level} Climate Goals")
+        t2.connect(climate, f"{level} Tier 2 to {level} Climate Goals")
