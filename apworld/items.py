@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from enum import Enum
 from BaseClasses import Item, ItemClassification    #type: ignore
 from Options import OptionError
-from .Data.ItemData import RiverValleyData, DesolateIslandData, map_displayname_to_data, ITEM_NAME_TO_ID, ITEM_NAME_TO_CLASSIFICATION
+from .Data.ItemData import ITEM_NAME_TO_ID, ITEM_NAME_TO_CLASSIFICATION
 if TYPE_CHECKING:
     from .world import TerraNilWorld # type: ignore
 
@@ -25,7 +25,7 @@ filler_toclassification = {key: value for key, _, value in filler_names_ids_clas
 ITEM_NAME_TO_ID |=              filler_toid
 ITEM_NAME_TO_CLASSIFICATION |=  filler_toclassification
 
-precollected_names: List[str] = {
+precollected_names: Dict[str, List[str]] = {
     "River Valley": [
         "Wind Turbine",
         "Toxin Scrubber",
