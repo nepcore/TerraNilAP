@@ -50,3 +50,33 @@ def create_events(world: TerraNilWorld) -> None:
             location_type=TerraNilLocation,
             item_type=TerraNilItem
         )
+        
+
+def generate_plaintext_locations(output_file_name: str) -> bool:
+    print("Want to generate plaintext locations name?")
+    if input("Type Y to continue: ").upper() != "Y":
+        print("Aborted.")
+        return False
+    
+    try:
+        with open(output_file_name, "x") as output_file:
+            for locationname, locationid in LOCATION_NAME_TO_ID.items():
+                print(locationname, file = output_file)
+        return True
+    
+    except FileExistsError:
+        print("Failed to generate plaintext locations; file already exists.")
+        return False
+            
+
+def main():
+    
+    status = generate_plaintext_locations("apworld/Data/List of all Locations.txt")
+    if status:
+        print("Done!")
+    else:
+        print("Failed...")
+    
+        
+if __name__ == "__main__":
+    main()
