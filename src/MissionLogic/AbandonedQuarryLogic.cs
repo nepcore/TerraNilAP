@@ -87,7 +87,7 @@ class AbandonedQuarryLogic : IMissionLogic
 
             if (TerraNilAP.Session.Locations.AllMissingLocations.Contains(firstLava))
             {
-                if (tile.type == Type.Lava)
+                if (tile.type == Type.Lava || tile.type == Type.LavaSource)
                 {
                     TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {firstLava});
                 }
