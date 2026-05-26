@@ -1,0 +1,224 @@
+River Valley - Energy
+River Valley - Pollution Removed
+River Valley - Greenery Begin
+River Valley - River
+River Valley - Greenery 25%
+River Valley - Greenery 50%
+River Valley - Greenery 75%
+River Valley - Greenery 100%
+River Valley - Wetlands Begun
+River Valley - Wetlands Completed
+River Valley - Fynbos Begun
+River Valley - Fynbos Completed
+River Valley - Forest Begun
+River Valley - Forest Completed
+River Valley - Fire
+River Valley - Recycling Begins
+River Valley - Recycling Completed
+River Valley - Photo Stars 3
+River Valley - Photo Stars 10
+River Valley - Photo Quality Bronze
+River Valley - Photo Quality Silver
+River Valley - Photo Quality Gold
+River Valley - Climate - Waterlillies Blossom
+River Valley - Climate - Migratory Birds Return
+River Valley - Climate - Ferns On Riverbanks
+River Valley - Climate - Fungi In Forests
+River Valley - Climate - Rains Begin
+River Valley - Climate - Wildflower Blooms
+River Valley - Climate - Salmon Run
+Abandoned Quarry - Energy
+Abandoned Quarry - Pollution Removed
+Abandoned Quarry - Greenery Begin
+Abandoned Quarry - River
+Abandoned Quarry - Lava
+Abandoned Quarry - Greenery 25%
+Abandoned Quarry - Greenery 50%
+Abandoned Quarry - Greenery 75%
+Abandoned Quarry - Greenery 100%
+Abandoned Quarry - Wetlands Begun
+Abandoned Quarry - Wetlands Completed
+Abandoned Quarry - Fynbos Begun
+Abandoned Quarry - Fynbos Completed
+Abandoned Quarry - Forest Begun
+Abandoned Quarry - Forest Completed
+Abandoned Quarry - Fire
+Abandoned Quarry - Recycling Begins
+Abandoned Quarry - Recycling Completed
+Abandoned Quarry - Photo Stars 3
+Abandoned Quarry - Photo Stars 10
+Abandoned Quarry - Photo Quality Bronze
+Abandoned Quarry - Photo Quality Silver
+Abandoned Quarry - Photo Quality Gold
+Abandoned Quarry - Climate - Wildflower Bloom
+Abandoned Quarry - Climate - Migratory Birds Return
+Abandoned Quarry - Climate - Fungi In Forests
+Abandoned Quarry - Climate - Ferns On Riverbanks
+Abandoned Quarry - Climate - Waterlilies Blossom
+Abandoned Quarry - Climate - Salmon Run
+Abandoned Quarry - Climate - Rains Begin
+Polluted Bay - Energy
+Polluted Bay - Pollution Removed
+Polluted Bay - Greenery Begin
+Polluted Bay - River
+Polluted Bay - Greenery 25%
+Polluted Bay - Greenery 50%
+Polluted Bay - Greenery 75%
+Polluted Bay - Greenery 100%
+Polluted Bay - Wetlands Begun
+Polluted Bay - Wetlands Completed
+Polluted Bay - Fynbos Begun
+Polluted Bay - Fynbos Completed
+Polluted Bay - Forest Begun
+Polluted Bay - Forest Completed
+Polluted Bay - Fire
+Polluted Bay - Recycling Begins
+Polluted Bay - Recycling Completed
+Polluted Bay - Photo Stars 3
+Polluted Bay - Photo Stars 10
+Polluted Bay - Photo Quality Bronze
+Polluted Bay - Photo Quality Silver
+Polluted Bay - Photo Quality Gold
+Polluted Bay - Climate - Wildflower Bloom
+Polluted Bay - Climate - Migratory Birds Return
+Polluted Bay - Climate - Fungi In Forests
+Polluted Bay - Climate - Ferns On Riverbanks
+Polluted Bay - Climate - Cliff Foiliage
+Polluted Bay - Climate - Waterlilies Blossom
+Polluted Bay - Climate - Salmon Run
+Polluted Bay - Climate - Vegetation Boom
+Polluted Bay - Climate - Rains Begin
+Hill and Dale - Energy
+Hill and Dale - Pollution Removed
+Hill and Dale - Greenery Begin
+Hill and Dale - River
+Hill and Dale - Greenery 25%
+Hill and Dale - Greenery 50%
+Hill and Dale - Greenery 75%
+Hill and Dale - Greenery 100%
+Hill and Dale - Wetlands Begun
+Hill and Dale - Wetlands Completed
+Hill and Dale - Fynbos Begun
+Hill and Dale - Fynbos Completed
+Hill and Dale - Forest Begun
+Hill and Dale - Forest Completed
+Hill and Dale - Rocky Shrublands Begun
+Hill and Dale - Rocky Shrublands Completed
+Hill and Dale - Fire
+Hill and Dale - Recycling Begins
+Hill and Dale - Recycling Completed
+Hill and Dale - Photo Stars 3
+Hill and Dale - Photo Stars 10
+Hill and Dale - Photo Quality Bronze
+Hill and Dale - Photo Quality Silver
+Hill and Dale - Photo Quality Gold
+Hill and Dale - Climate - Wildflower Bloom
+Hill and Dale - Climate - Migratory Birds Return
+Hill and Dale - Climate - Fungi In Forests
+Hill and Dale - Climate - Ferns On Riverbanks
+Hill and Dale - Climate - Waterlilies Blossom
+Hill and Dale - Climate - Salmon Run
+Hill and Dale - Climate - Rains Begin
+Desolate Island - Energy
+Desolate Island - Pollution Removed
+Desolate Island - Greenery Begin
+Desolate Island - River
+Desolate Island - Ocean Pollution Removed
+Desolate Island - Greenery 25%
+Desolate Island - Greenery 50%
+Desolate Island - Greenery 75%
+Desolate Island - Greenery 100%
+Desolate Island - Mangrove Begun
+Desolate Island - Mangrove Completed
+Desolate Island - Tropical Forest Begun
+Desolate Island - Tropical Forest Completed
+Desolate Island - Beach Begun
+Desolate Island - Beach Completed
+Desolate Island - Coral Reef Begun
+Desolate Island - Coral Reef Completed
+Desolate Island - Recycling Begins
+Desolate Island - Recycling Completed
+Desolate Island - Photo Stars 3
+Desolate Island - Photo Stars 10
+Desolate Island - Photo Quality Bronze
+Desolate Island - Photo Quality Silver
+Desolate Island - Photo Quality Gold
+Desolate Island - Climate - Moss On Rock Faces
+Desolate Island - Climate - Migratory Birds Return
+Desolate Island - Climate - Crabs Populate Beaches
+Desolate Island - Climate - Coconut Palms
+Desolate Island - Climate - Dragonflies
+Desolate Island - Climate - Jellyfish Return
+Desolate Island - Climate - Ferns On Riverbanks
+Desolate Island - Climate - Ivy Overgrowth
+Desolate Island - Climate - Vines Grow
+Desolate Island - Climate - Waterlilies Blossom
+Desolate Island - Climate - Thunderstorms Begin
+Scorched Caldera - Energy
+Scorched Caldera - Pollution Removed
+Scorched Caldera - Greenery Begin
+Scorched Caldera - Lava
+Scorched Caldera - Greenery 25%
+Scorched Caldera - Greenery 50%
+Scorched Caldera - Greenery 75%
+Scorched Caldera - Greenery 100%
+Scorched Caldera - Bamboo Begun
+Scorched Caldera - Bamboo Completed
+Scorched Caldera - Lake Vegetation Begun
+Scorched Caldera - Lake Vegetation Completed
+Scorched Caldera - Tropical Forest Begun
+Scorched Caldera - Tropical Forest Completed
+Scorched Caldera - Coral Reef Begun
+Scorched Caldera - Coral Reef Completed
+Scorched Caldera - Recycling Begins
+Scorched Caldera - Recycling Completed
+Scorched Caldera - Photo Stars 3
+Scorched Caldera - Photo Stars 10
+Scorched Caldera - Photo Quality Bronze
+Scorched Caldera - Photo Quality Silver
+Scorched Caldera - Photo Quality Gold
+Scorched Caldera - Climate - Ivy Overgrowth
+Scorched Caldera - Climate - Migratory Birds Return
+Scorched Caldera - Climate - Ferns on Riverbanks
+Scorched Caldera - Climate - Vines Grow
+Scorched Caldera - Climate - Waterlilies Blossom
+Scorched Caldera - Climate - Dragonflies
+Scorched Caldera - Climate - Cloud Forests
+Scorched Caldera - Climate - Moss on Rock Faces
+Scorched Caldera - Climate - Thunderstorms Begin
+Volcanic Glacier - Energy
+Volcanic Glacier - Pollution Removed
+Volcanic Glacier - Greenery Begin
+Volcanic Glacier - Ocean Pollution Removed
+Volcanic Glacier - Lava
+Volcanic Glacier - Greenery 25%
+Volcanic Glacier - Greenery 50%
+Volcanic Glacier - Greenery 75%
+Volcanic Glacier - Greenery 100%
+Volcanic Glacier - Tundra Begun
+Volcanic Glacier - Tundra Completed
+Volcanic Glacier - Forest Begun
+Volcanic Glacier - Forest Completed
+Volcanic Glacier - Lichen Begun
+Volcanic Glacier - Lichen Completed
+Volcanic Glacier - Kelp Forest Begun
+Volcanic Glacier - Kelp Forest Completed
+Volcanic Glacier - Fire
+Volcanic Glacier - Recycling Begins
+Volcanic Glacier - Recycling Completed
+Volcanic Glacier - Photo Stars 3
+Volcanic Glacier - Photo Stars 10
+Volcanic Glacier - Photo Quality Bronze
+Volcanic Glacier - Photo Quality Silver
+Volcanic Glacier - Photo Quality Gold
+Volcanic Glacier - Climate - Snow Melts
+Volcanic Glacier - Climate - Fungi in Forests
+Volcanic Glacier - Climate - Icebergs Form
+Volcanic Glacier - Climate - Moss on Boulders
+Volcanic Glacier - Climate - Ivy Overgrowth
+Volcanic Glacier - Climate - Butterflies
+Volcanic Glacier - Climate - Migratory Birds Return
+Volcanic Glacier - Climate - Moss on Rock Faces
+Volcanic Glacier - Climate - Pelagic Fish
+Volcanic Glacier - Climate - Snowfall Begins
+Volcanic Glacier - Climate - Aurora

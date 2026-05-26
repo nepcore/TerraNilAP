@@ -1,0 +1,19 @@
+River Valley:
+    Tier 1:
+        + First Energy            - Requires Wind Turbine
+        + First Pollution Removed - Requires Wind Turbine and Toxin Scrubber
+        + First Greenery          - Requires Wind Turbine, Toxin Scrubber and Irrigator
+        + First Water             - Requires Wind Turbine, Water Pump
+        + Greenery 25%            
+        + Greenery 50%
+        + Greenery 75%
+        + Greenery 100%
+
+    Tier 2:
+        First Fynbos        - Requires Beehives
+        First Wetlands      - Requires Hydroponium, Water Pump
+        First Forest        - Requires Beehive, Solar, Arboreteum
+        First Fire          - Requires Beehive, Solar
+        Fynbos Completed    - Requires Beehive, Solar, Arboreteum
+        Wetlands Completed  - Requires Hydroponium, Water Pump
+        Forest Completed    - Requires Beehive, Solar, Arboreteum
