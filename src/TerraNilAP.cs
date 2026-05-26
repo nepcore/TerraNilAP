@@ -68,6 +68,19 @@ public class TerraNilAP : BaseUnityPlugin
         {
             Console.ToggleVisible();
         }
+
+        if (UnityEngine.InputSystem.Keyboard.current.f2Key.wasPressedThisFrame)
+        {
+            var offset = 150;
+            if (UnityEngine.InputSystem.Keyboard.current.shiftKey.isPressed) offset = 0;
+
+            // the timer cycles back to 0 when it hits 300 and ignores anything beyond that, so this always forces it to 0
+            Utils.MonoSingleton<Controller.GameController>.Instance.GameState.climateState.IncrementWeatherCycleTimer(300);
+
+            // the transition between weather states takes 30 seconds, so add 20 to the time for the desired weather state
+            // to skip most of the transition but still try to let sound effects update correctly
+            Utils.MonoSingleton<Controller.GameController>.Instance.GameState.climateState.IncrementWeatherCycleTimer(offset + 20);
+        }
     }
 
     private static void GiveMoney(int amount)

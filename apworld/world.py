@@ -19,6 +19,8 @@ class TerraNilWorld(World):
 
     origin_region_name = "Menu"
 
+    ut_can_gen_without_yaml = True
+
     def create_regions(self) -> None:
         regions.create_and_connect_regions(self)
         locations.create_all_locations(self)
@@ -36,9 +38,27 @@ class TerraNilWorld(World):
         return items.get_filler_item_name(self)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        return self.options.as_dict("climate_goals", "levels_cleared_to_goal", "game_difficulty")
+        data = self.options.as_dict("climate_goals", "levels_cleared_to_goal", "game_difficulty")
+        data["starting_level"] = self.starting_level
+        return data
+
+    @staticmethod
+    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
+        return slot_data
 
     def generate_early(self) -> None:
+        # if in ut get options from slot data
+        re_gen_passthrough = getattr(self.multiworld, "re_gen_passthrough", {})
+        if re_gen_passthrough and self.game in re_gen_passthrough:
+            print("received passthrough")
+            slot_data: dict[str, Any] = re_gen_passthrough[self.game]
+            for key, value in slot_data.items():
+                if key == "starting_level":
+                    value = value.lower().replace(" ", "_")
+                opt: Optional[Option] = getattr(self.options, key, None)
+                if opt is not None:
+                    setattr(self.options, key, opt.from_any(value))
+
         temperate = ["River Valley", "Hill and Dale", "Polluted Bay", "Abandoned Quarry"]
         tropical = ["Desolate Island", "Scorched Caldera"]
         polar = ["Volcanic Glacier"]
