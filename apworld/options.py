@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from Options import PerGameCommonOptions, Toggle, DefaultOnToggle, Range, Choice
+from Options import PerGameCommonOptions, Toggle, DefaultOnToggle, Range, Choice, OptionCounter, OptionGroup, ProgressionBalancing, Accessibility
+from schema import Schema
 
 class ClimateGoals(DefaultOnToggle):
     """Adds climate goals as checks"""
@@ -20,11 +21,56 @@ class LevelsClearedToGoal(Range):
     range_end = 7
     default = 7
 
+class NumberOfLevels(Range):
+    """
+    The maximum number of levels included in generation
+    Must be greater than or equal to levels cleared to goal
+    """
+
+    display_name = "Number of Levels"
+
+    default = 7
+    range_start = 1
+    range_end = 7
+
+class LevelLikeliness(OptionCounter):
+    """
+    Controls which levels can appear in the multiworld
+    0 means that level will not appear
+    Any other positive number is treated as a weight for how likely it is for that level to appear
+    """
+
+    display_name = "Level Likeliness"
+
+    schema = Schema({
+        "River Valley": int,
+        "Hill and Dale": int,
+        "Polluted Bay": int,
+        "Abandoned Quarry": int,
+
+        "Desolate Island": int,
+        "Scorched Caldera": int,
+
+        "Volcanic Glacier": int,
+    })
+
+    min = 0
+
+    default = {
+        "River Valley": 5,
+        "Hill and Dale": 5,
+        "Polluted Bay": 5,
+        "Abandoned Quarry": 5,
+
+        "Desolate Island": 5,
+        "Scorched Caldera": 5,
+
+        "Volcanic Glacier": 5,
+    }
+
 class StartingLevel(Choice):
     """
     The level you will start with
-
-    The options Temparate, Tropical and Polar pick a random level from the selected region
     """
 
     display_name = "Starting Level"
@@ -78,11 +124,27 @@ class GameDifficulty(Choice):
 
 @dataclass
 class TerraNilOptions(PerGameCommonOptions):
-    rain_logic: RainLogic
-    climate_goals: ClimateGoals
     levels_cleared_to_goal: LevelsClearedToGoal
+    number_of_levels: NumberOfLevels
+    level_likeliness: LevelLikeliness
     starting_level: StartingLevel
     game_difficulty: GameDifficulty
+    climate_goals: ClimateGoals
+    rain_logic: RainLogic
 
-option_groups = []
+option_groups = [
+    OptionGroup("Basic", [
+        GameDifficulty,
+        NumberOfLevels,
+        LevelsClearedToGoal,
+        LevelLikeliness,
+        StartingLevel,
+        ClimateGoals,
+    ]),
+    OptionGroup("Advanced", [
+        ProgressionBalancing,
+        Accessibility,
+        RainLogic,
+    ])
+]
 option_presets = {}

@@ -12,7 +12,7 @@ class MissionSceneDataPatch
         var missionid = (uint) __instance.mission;
         var id = (1u << 31) | (1u << 30) | (missionid << 12);
         var hasItem = false;
-        foreach (var item in TerraNilAP.Session.Items.AllItemsReceived)
+        foreach (var item in TerraNilAP.Connection.Items.AllItemsReceived)
         {
             hasItem = id == item.ItemId;
             if (hasItem) break;

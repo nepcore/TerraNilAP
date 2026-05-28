@@ -82,117 +82,117 @@ class VolcanicGlacierLogic : IMissionLogic
 
         foreach (var tile in state.mapState.map)
         {
-            if (TerraNilAP.Session.Locations.AllMissingLocations.Contains(firstPower))
+            if (TerraNilAP.Connection.Locations.AllMissingLocations.Contains(firstPower))
             {
                 if (tile.HasResource(Resource.Power))
                 {
-                    TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {firstPower});
+                    TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {firstPower});
                 }
             }
 
-            if (TerraNilAP.Session.Locations.AllMissingLocations.Contains(firstGreenery))
+            if (TerraNilAP.Connection.Locations.AllMissingLocations.Contains(firstGreenery))
             {
                 if (tile.type == Type.Greenery)
                 {
-                    TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {firstGreenery});
+                    TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {firstGreenery});
                 }
             }
 
-            if (TerraNilAP.Session.Locations.AllMissingLocations.Contains(firstLava))
+            if (TerraNilAP.Connection.Locations.AllMissingLocations.Contains(firstLava))
             {
                 if (tile.type == Type.Lava || tile.type == Type.LavaSource)
                 {
-                    TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {firstLava});
+                    TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {firstLava});
                 }
             }
 
-            if (TerraNilAP.Session.Locations.AllMissingLocations.Contains(firstFire))
+            if (TerraNilAP.Connection.Locations.AllMissingLocations.Contains(firstFire))
             {
                 if (tile.isOnFire)
                 {
-                    TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {firstFire});
+                    TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {firstFire});
                 }
             }
         }
 
-        if (state.progressionState.Tier1Progress >= 0.25 && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t1p25))
+        if (state.progressionState.Tier1Progress >= 0.25 && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t1p25))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t1p25});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t1p25});
         }
 
-        if (state.progressionState.Tier1Progress >= 0.5 && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t1p50))
+        if (state.progressionState.Tier1Progress >= 0.5 && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t1p50))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t1p50});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t1p50});
         }
 
-        if (state.progressionState.Tier1Progress >= 0.75 && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t1p75))
+        if (state.progressionState.Tier1Progress >= 0.75 && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t1p75))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t1p75});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t1p75});
         }
 
-        if (state.progressionState.Tier1Progress >= 1 && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t1p100))
+        if (state.progressionState.Tier1Progress >= 1 && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t1p100))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t1p100});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t1p100});
         }
 
-        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Tundra) >= (tundraTarget * 0.02) && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t2tundra1))
+        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Tundra) >= (tundraTarget * 0.02) && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t2tundra1))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t2tundra1});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t2tundra1});
         }
 
-        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Tundra) >= tundraTarget && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t2tundra100))
+        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Tundra) >= tundraTarget && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t2tundra100))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t2tundra100});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t2tundra100});
         }
 
-        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.BorealForest) >= (forestTarget * 0.02) && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t2forest1))
+        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.BorealForest) >= (forestTarget * 0.02) && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t2forest1))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t2forest1});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t2forest1});
         }
 
-        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.BorealForest) >= forestTarget && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t2forest100))
+        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.BorealForest) >= forestTarget && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t2forest100))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t2forest100});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t2forest100});
         }
 
-        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Lichen) >= (lichenTarget * 0.01) && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t2lichen1))
+        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Lichen) >= (lichenTarget * 0.01) && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t2lichen1))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t2lichen1});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t2lichen1});
         }
 
-        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Lichen) >= lichenTarget && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t2lichen100))
+        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Lichen) >= lichenTarget && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t2lichen100))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t2lichen100});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t2lichen100});
         }
 
-        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Kelp) >= (kelpForestTarget * 0.01) && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t2kelpForest1))
+        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Kelp) >= (kelpForestTarget * 0.01) && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t2kelpForest1))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t2kelpForest1});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t2kelpForest1});
         }
 
-        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Kelp) >= kelpForestTarget && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t2kelpForest100))
+        if (state.progressionState.Tier2ProgressDict.GetValueSafe(Type.Kelp) >= kelpForestTarget && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t2kelpForest100))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t2kelpForest100});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t2kelpForest100});
         }
 
-        if (state.progressionState.ProgressionTier == 3 && state.progressionState.Tier3RecyclingProgress >= 0.01 && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t3recycle1))
+        if (state.progressionState.ProgressionTier == 3 && state.progressionState.Tier3RecyclingProgress >= 0.01 && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t3recycle1))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t3recycle1});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t3recycle1});
         }
 
-        if (state.progressionState.ProgressionTier == 3 && state.progressionState.Tier3RecyclingProgress >= 1 && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t3recycle100))
+        if (state.progressionState.ProgressionTier == 3 && state.progressionState.Tier3RecyclingProgress >= 1 && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t3recycle100))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t3recycle100});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t3recycle100});
         }
 
-        if (state.progressionState.missionPhotoStarScorecard.GetStarProgressAsAPercentage >= 0.29 && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t3photo3))
+        if (state.progressionState.missionPhotoStarScorecard.GetStarProgressAsAPercentage >= 0.29 && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t3photo3))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t3photo3});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t3photo3});
         }
 
-        if (state.progressionState.missionPhotoStarScorecard.GetStarProgressAsAPercentage >= .99 && TerraNilAP.Session.Locations.AllMissingLocations.Contains(t3photo10))
+        if (state.progressionState.missionPhotoStarScorecard.GetStarProgressAsAPercentage >= .99 && TerraNilAP.Connection.Locations.AllMissingLocations.Contains(t3photo10))
         {
-            TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {t3photo10});
+            TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {t3photo10});
         }
 
         var missionData = (MissionData)state.climateState.GetType().GetField("_mission", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(state.climateState);
@@ -201,9 +201,9 @@ class VolcanicGlacierLogic : IMissionLogic
             if (state.climateState.ClimateBlackboard.GetValue(cond.keyWhenTrue))
             {
                 var id = names.GetValueSafe(cond.keyWhenTrue);
-                if (TerraNilAP.Session.Locations.AllMissingLocations.Contains(id))
+                if (TerraNilAP.Connection.Locations.AllMissingLocations.Contains(id))
                 {
-                    TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] { id });
+                    TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] { id });
                 }
             }
         }

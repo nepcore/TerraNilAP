@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from enum import Enum
 from BaseClasses import Item, ItemClassification    #type: ignore
 from Options import OptionError
-from .Data.ItemData import RiverValleyData, DesolateIslandData, map_displayname_to_data, ITEM_NAME_TO_ID, ITEM_NAME_TO_CLASSIFICATION
+from .Data.ItemData import RiverValleyData, DesolateIslandData, map_displayname_to_data, ITEM_NAME_TO_ID, ITEM_NAME_TO_CLASSIFICATION, items_by_level
 if TYPE_CHECKING:
     from .world import TerraNilWorld # type: ignore
 
@@ -74,7 +74,10 @@ def create_all_items(world: TerraNilWorld) -> None:
     precollected = [f"{world.starting_level} - {item}" for item in precollected_names[world.starting_level]]
     precollected += [f"{world.starting_level} Unlock"]
 
-    pool: List[Item] = [world.create_item(item) for item in ITEM_NAME_TO_ID.keys() if item not in precollected]
+    items = []
+    for level in world.levels_enabled:
+        items += items_by_level[level]
+    pool: List[Item] = [world.create_item(item) for item in items if item not in precollected]
 
     locations = len(world.multiworld.get_unfilled_locations(world.player))
     n_fillers = locations - len(pool)

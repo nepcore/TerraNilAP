@@ -1,5 +1,8 @@
 using Global;
 using HarmonyLib;
+using System;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace TerraNilAP;
 
@@ -8,10 +11,12 @@ class LoadGamePatch
 {
     public static bool Prefix(ref string __0, CampaignStateManager __instance)
     {
-        if (__instance.GameState != null && __0 == $"start_of_{__instance.GameState.progressionState.ProgressionTier}.save")
+        if (Regex.Match(__0, "start_of_\\d.save$").Success)
         {
             var mission = (int) __instance.GameState.missionKey;
-            __0 = $"{mission}_start_of_{__instance.GameState.progressionState.ProgressionTier}.save";
+            var parts = __0.Split(Path.DirectorySeparatorChar);
+            parts[parts.Length - 1] = $"{mission}_{parts[parts.Length - 1]}";
+            __0 = String.Join(Path.DirectorySeparatorChar, parts);
         }
         return true;
     }

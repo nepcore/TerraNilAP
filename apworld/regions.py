@@ -4,16 +4,6 @@ from BaseClasses import Entrance, Region
 if TYPE_CHECKING:
     from.world import TerraNilWorld
 
-levels = [
-    "River Valley",
-    "Abandoned Quarry",
-    "Polluted Bay",
-    "Hill and Dale",
-    "Desolate Island",
-    "Scorched Caldera",
-    "Volcanic Glacier",
-]
-
 def create_and_connect_regions(world: TerraNilWorld) -> None:
     create_all_regions(world)
     connect_regions(world)
@@ -23,7 +13,7 @@ def create_all_regions(world: TerraNilWorld) -> None:
     worldmap = Region("World Map", world.player, world.multiworld)
     world.multiworld.regions += [menu, worldmap]
 
-    for level in levels:
+    for level in world.levels_enabled:
         create_regions_for_level(world, level)
 
 def create_regions_for_level(world: TerraNilWorld, level: str) -> None:
@@ -45,7 +35,7 @@ def connect_regions(world: TerraNilWorld) -> None:
     t2.connect(worldmap, f"{world.starting_level} Tier 2 to World Map")
     #menu.connect(world.get_region("River Valley Tier 1"), "Menu to River Valley Tier 1")
 
-    for level in levels:
+    for level in world.levels_enabled:
         connect_regions_for_level(world, level)
 
 def connect_regions_for_level(world: TerraNilWorld, level: str) -> None:

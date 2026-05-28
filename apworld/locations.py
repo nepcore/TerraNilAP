@@ -317,7 +317,7 @@ class TerraNilLocation(Location):
     game = "TerraNil"
 
 def create_all_locations(world: TerraNilWorld) -> None:
-    for level in locations:
+    for level in world.levels_enabled:
         world.get_region(f"{level} Tier 1").add_locations(locations[level][0], TerraNilLocation)
         world.get_region(f"{level} Tier 2").add_locations(locations[level][1], TerraNilLocation)
         world.get_region(f"{level} Tier 3").add_locations(locations[level][2], TerraNilLocation)
@@ -328,7 +328,7 @@ def create_all_locations(world: TerraNilWorld) -> None:
     create_events(world)
 
 def create_events(world: TerraNilWorld) -> None:
-    for level in locations:
+    for level in world.levels_enabled:
         t1 = world.get_region(f"{level} Tier 1")
         t2 = world.get_region(f"{level} Tier 2")
         t3 = world.get_region(f"{level} Tier 3")

@@ -22,23 +22,23 @@ class PhotoTakerPatch
         uint gold = (1u << 31) | (mission << 12) | 102u;
         if (medal == PhotoScoreCalculator.Medal.Bronze)
         {
-            if (TerraNilAP.Session.Locations.AllMissingLocations.Contains(bronze))
+            if (TerraNilAP.Connection.Locations.AllMissingLocations.Contains(bronze))
             {
-                TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {bronze});
+                TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {bronze});
             }
         }
         else if (medal == PhotoScoreCalculator.Medal.Silver)
         {
-            if (TerraNilAP.Session.Locations.AllMissingLocations.Contains(silver))
+            if (TerraNilAP.Connection.Locations.AllMissingLocations.Contains(silver))
             {
-                TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {bronze, silver});
+                TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {bronze, silver});
             }
         }
         else if (medal == PhotoScoreCalculator.Medal.Gold)
         {
-            if (TerraNilAP.Session.Locations.AllMissingLocations.Contains(gold))
+            if (TerraNilAP.Connection.Locations.AllMissingLocations.Contains(gold))
             {
-                TerraNilAP.Session.Locations.CompleteLocationChecks(new long[] {bronze, silver, gold});
+                TerraNilAP.Connection.Locations.CompleteLocationChecks(new long[] {bronze, silver, gold});
             }
         }
     }

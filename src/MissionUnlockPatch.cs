@@ -16,7 +16,7 @@ class MissionUnlockPatch
             var missionid = (long) mission;
             var id = (1L << 31) | (1L << 30) | (missionid << 12);
             var hasItem = false;
-            foreach (var item in TerraNilAP.Session.Items.AllItemsReceived)
+            foreach (var item in TerraNilAP.Connection.Items.AllItemsReceived)
             {
                 hasItem = id == item.ItemId;
                 if (hasItem) break;

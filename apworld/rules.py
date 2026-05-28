@@ -5,41 +5,31 @@ from rule_builder.rules import Has, HasAll, HasFromListUnique, Rule
 if TYPE_CHECKING:
     from .world import TerraNilWorld
 
-levels = [
-    "River Valley",
-    "Abandoned Quarry",
-    "Polluted Bay",
-    "Hill and Dale",
-    "Desolate Island",
-    "Scorched Caldera",
-    "Volcanic Glacier",
-]
-
 def set_all_rules(world: TerraNilWorld) -> None:
     set_all_entrance_rules(world)
     set_all_location_rules(world)
     set_completion_condition(world)
 
 def set_all_entrance_rules(world: TerraNilWorld) -> None:
-    for level in levels:
+    for level in world.levels_enabled:
         world.set_rule(world.get_entrance(f"World Map to {level} Tier 1"), Has(f"{level} Unlock"))
         world.set_rule(world.get_entrance(f"{level} Tier 1 to {level} Tier 2"), Has(f"{level} - Tier 1 Completed"))
         world.set_rule(world.get_entrance(f"{level} Tier 2 to {level} Tier 3"), Has(f"{level} - Tier 2 Completed"))
         #world.set_rule(world.get_entrance(f"{level} Tier 3 to World Map"), Has(f"{level} - Liftoff"))
         world.set_rule(world.get_entrance(f"{world.starting_level} Tier 2 to World Map"), Has(f"{world.starting_level} - Tier 2 Completed"))
 
-    if world.options.climate_goals:
+    if world.options.climate_goals and "River Valley" in world.levels_enabled:
         rivervalley_climate = world.get_entrance("River Valley Tier 2 to River Valley Climate Goals")
         world.set_rule(rivervalley_climate, Has("River Valley - Research Center"))
 
 def set_all_location_rules(world: TerraNilWorld) -> None:
-    set_all_location_rules_river_valley(world)
-    set_all_location_rules_abandoned_quarry(world)
-    set_all_location_rules_polluted_bay(world)
-    set_all_location_rules_hill_and_dale(world)
-    set_all_location_rules_desolate_island(world)
-    set_all_location_rules_scorched_caldera(world)
-    set_all_location_rules_volcanic_glacier(world)
+    if "River Valley" in world.levels_enabled: set_all_location_rules_river_valley(world)
+    if "Abandoned Quarry" in world.levels_enabled: set_all_location_rules_abandoned_quarry(world)
+    if "Polluted Bay" in world.levels_enabled: set_all_location_rules_polluted_bay(world)
+    if "Hill and Dale" in world.levels_enabled: set_all_location_rules_hill_and_dale(world)
+    if "Desolate Island" in world.levels_enabled: set_all_location_rules_desolate_island(world)
+    if "Scorched Caldera" in world.levels_enabled: set_all_location_rules_scorched_caldera(world)
+    if "Volcanic Glacier" in world.levels_enabled: set_all_location_rules_volcanic_glacier(world)
 
 def set_all_location_rules_river_valley(world: TerraNilWorld) -> None:
     tier1 = Has("River Valley - Tier 1 Completed")
@@ -441,11 +431,11 @@ def set_all_location_rules_desolate_island(world: TerraNilWorld) -> None:
     world.set_rule(world.get_location("Desolate Island - Beach Completed"), beach)
 
     partial_mangrove = tier1 & Has("Desolate Island - Hydroponium")
-    full_mangrove = partial_mangrove & Has("Desolate Island - Salinator")
+    full_mangrove = partial_mangrove & HasAll("Desolate Island - Salinator", "Desolate Island - Combustor")
     world.set_rule(world.get_location("Desolate Island - First Mangrove"), partial_mangrove)
     world.set_rule(world.get_location("Desolate Island - Mangrove Completed"), full_mangrove)
 
-    rainforest = tier1 & HasAll("Desolate Island - Shadecloth Pillar", "Desolate Island - Combustor")
+    rainforest = tier1 & HasAll("Desolate Island - Shadecloth Pillar", "Desolate Island - Cloud Seeder")
     world.set_rule(world.get_location("Desolate Island - First Tropical Forest"), rainforest)
     world.set_rule(world.get_location("Desolate Island - Tropical Forest Completed"), rainforest)
 
@@ -489,14 +479,12 @@ def set_all_location_rules_desolate_island(world: TerraNilWorld) -> None:
     world.set_rule(world.get_location("Desolate Island - Liftoff"), photos & recyclingfull)
 
     if world.options.climate_goals:
-        humidity = water & Has("Desolate Island - Cloud Seeder")
+        humidity = Has("Desolate Island - Cloud Seeder")
         temperature = partial_greenery & Has("Desolate Island - Combustor")
 
         for goal in [
             "Desolate Island - Migratory Birds Return",
             "Desolate Island - Crabs Populate Beaches",
-            "Desolate Island - Coconut Palms",
-            "Desolate Island - Dragonflies",
         ]:
             world.set_rule(world.get_location(goal), temperature)
 
@@ -511,9 +499,16 @@ def set_all_location_rules_desolate_island(world: TerraNilWorld) -> None:
             "Desolate Island - Ivy Overgrowth",
             "Desolate Island - Jellyfish Return",
             "Desolate Island - Vines Grow",
-            "Desolate Island - Thunderstorms Begin",
         ]:
             world.set_rule(world.get_location(goal), humidity & temperature)
+
+        for goal in [
+            "Desolate Island - Coconut Palms",
+            "Desolate Island - Dragonflies",
+        ]:
+            world.set_rule(world.get_location(goal), temperature & recyclingbase)
+
+        world.set_rule(world.get_location("Desolate Island - Thunderstorms Begin"), humidity & temperature & recyclingbase)
 
 def set_all_location_rules_scorched_caldera(world: TerraNilWorld) -> None:
     tier1 = Has("Scorched Caldera - Tier 1 Completed")
@@ -679,6 +674,6 @@ def set_all_location_rules_volcanic_glacier(world: TerraNilWorld) -> None:
 
 def set_completion_condition(world: TerraNilWorld) -> None:
     world.set_completion_rule(HasFromListUnique(
-        *[f"{level} - Liftoff" for level in levels],
+        *[f"{level} - Liftoff" for level in world.levels_enabled],
         count = world.options.levels_cleared_to_goal.value
     ))

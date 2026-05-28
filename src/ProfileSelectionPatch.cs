@@ -1,5 +1,3 @@
-using Archipelago.MultiClient.Net;
-using Global;
 using HarmonyLib;
 using RTLTMPro;
 using TMPro;
@@ -14,8 +12,6 @@ namespace TerraNilAP;
 [HarmonyPatch(typeof(ProfileSelectionHandler), "Start")]
 class ProfileSelectionPatch
 {
-    private static GameObject cutsceneSkipper;
-
     private static void RenderInput(GameObject input, Transform parent, string label, string initial = "")
     {
         var wrapper = new GameObject("InputWrapper");
@@ -53,50 +49,10 @@ class ProfileSelectionPatch
     public static async void OnSwitchProfile()
     {
         try {
-            if (TerraNilAP.Session.Socket != null && TerraNilAP.Session.Socket.Connected) await TerraNilAP.Session.Socket.DisconnectAsync();
+            if (TerraNilAP.Connection.Connected) await TerraNilAP.Connection.Disconnect();
         } catch {} // ignore exceptions
-        Unpatch();
+        TerraNilAP.Connection.Unpatch();
         GameObject.Find("/Canvas/Buttons/SwitchProfileButton").GetComponent<Button>().onClick.RemoveListener(OnSwitchProfile);
-    }
-
-    public static void InjectPatches()
-    {
-        TerraNilAP.Harmony.PatchAll(typeof(TutorialPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(GetBuldingDataPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(CreateBuildingPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(GameStateSyncPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(LaunchButtonPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(DifficultyPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(PhotoTakerPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(NewGamePatch));
-        TerraNilAP.Harmony.PatchAll(typeof(MissionUnlockPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(MissionSceneDataPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(StartMissionPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(LoadScenePatch));
-        TerraNilAP.Harmony.PatchAll(typeof(ProgressionInterfaceHandlerPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(PauseMenuPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(SaveGamePatch));
-        TerraNilAP.Harmony.PatchAll(typeof(AutosavePatch));
-        TerraNilAP.Harmony.PatchAll(typeof(LoadGamePatch));
-        TerraNilAP.Harmony.PatchAll(typeof(WorldMapLoadMissionPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(ClearGameStatePatch));
-        TerraNilAP.Harmony.PatchAll(typeof(ExecuteSceneLoadPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(AirshipIntroPatch));
-        TerraNilAP.Harmony.PatchAll(typeof(DifficultySelectionPatch));
-        cutsceneSkipper = new GameObject("CutsceneSkipper");
-        cutsceneSkipper.AddComponent<CutscenePatch>();
-    }
-
-    public static void Unpatch()
-    {
-        TerraNilAP.Harmony.UnpatchSelf();
-        Object.DestroyImmediate(cutsceneSkipper);
-        if (TerraNilAP.Console != null)
-        {
-            TerraNilAP.Session.MessageLog.OnMessageReceived -= TerraNilAP.Console.AddAPMessage;
-            TerraNilAP.Console.Destroy();
-            TerraNilAP.Console = null;
-        }
     }
 
     public static async void OnSelectArchipelago()
@@ -105,7 +61,7 @@ class ProfileSelectionPatch
 
         try
         {
-            if (TerraNilAP.Session != null && TerraNilAP.Session.Socket.Connected) await TerraNilAP.Session.Socket.DisconnectAsync();
+            if (TerraNilAP.Connection != null && TerraNilAP.Connection.Connected) await TerraNilAP.Connection.Disconnect();
         }
         catch {} // ignore exceptions
 
@@ -129,128 +85,9 @@ class ProfileSelectionPatch
                 var slotStr = slot.GetComponent<TMPro.TMP_InputField>().text;
                 var passStr = pass.GetComponent<TMPro.TMP_InputField>().text;
 
-                TerraNilAP.Logger.LogInfo("Connecting to archipelago");
-                TerraNilAP.Logger.LogInfo("Creating session");
-                TerraNilAP.Session = ArchipelagoSessionFactory.CreateSession(hostStr + ":" + portStr);
-                TerraNilAP.Completed = new System.Collections.Generic.HashSet<Model.Mission>();
-                TerraNilAP.Console = new APConsole.APConsole(
-                    TerraNilAP.ConsoleAssets,
-                    (_, to) => {
-                        return to.name == "WorldMap" || to.name == "Main";
-                    }
-                );
-                TerraNilAP.Console.SetFont(TerraNilAP.Font);
-                TerraNilAP.Console.AddText("<color=green>You can toggle this console by pressing F1</color>");
-                TerraNilAP.Session.MessageLog.OnMessageReceived += TerraNilAP.Console.AddAPMessage;
-                try
-                {
-                    TerraNilAP.Logger.LogInfo("Initiating connection");
-                    var roomInfo = await TerraNilAP.Session.ConnectAsync();
-                    TerraNilAP.Logger.LogInfo("Logging in");
-                    var loginResult = await TerraNilAP.Session.LoginAsync(
-                        TerraNilAP.GameName,
-                        slotStr,
-                        Archipelago.MultiClient.Net.Enums.ItemsHandlingFlags.AllItems,
-                        password: passStr,
-                        requestSlotData: true
-                    );
+                TerraNilAP.Connection = new APConnection(hostStr, portStr, slotStr, passStr);
 
-                    switch (loginResult)
-                    {
-                        case LoginFailure fail:
-                            TerraNilAP.Logger.LogError(fail.Errors.Join(delimiter: "\n"));
-                            MonoSingleton<MessageHandler>.Instance.CreateConfirmationDialog("Login failed", fail.Errors.Join(delimiter: "\n"));
-                            return;
-                        case LoginSuccessful login:
-                            TerraNilAP.Logger.LogInfo("Setting up archipelago profile");
-                            var profileName = $"Archipelago {roomInfo.SeedName} {login.Team} {login.Slot}";
-                            if (MonoSingleton<CampaignStateManager>.Instance.LoadPlayerProfile(profileName) == null)
-                            {
-                                MonoSingleton<CampaignStateManager>.Instance.CreateAndAssignNewProfile(profileName);
-                                //var dsp = new View.UiHelpers.Panels.DifficultySelectPanel();
-                                var diff = 2L;
-                                switch (login.SlotData.GetValueSafe("game_difficulty"))
-                                {
-                                    case long n:
-                                        diff = n;
-                                        break;
-                                    default:
-                                        MonoSingleton<MessageHandler>.Instance.CreateConfirmationDialog(
-                                            "Warning",
-                                            $"Failed to find the selected difficulty in slot data, assuming Ecologist"
-                                        );
-                                        break;
-                                }
-                                TerraNilAP.Logger.LogInfo($"difficulty is {diff}");
-                                DifficultySelectionPatch.Difficulty = (int) diff;
-
-                            }
-                            MonoSingleton<ProfileSelectionHandler>.Instance.UpdateAllProfileLanguages();
-                            var profileState = MonoSingleton<CampaignStateManager>.Instance.LoadPlayerProfile(profileName);
-                            profileState.difficultyState.hasSelectedDifficulty = true;
-                            profileState.hasPlayedTutorial = true;
-                            profileState.hasPlayedClimateTutorial = true;
-                            profileState.hasPlayedAnimalTutorialIntro = true;
-                            profileState.hasPlayedAnimalTutorialGoal = true;
-                            profileState.hasPlayedAbilityTutorial = true;
-                            MonoSingleton<CampaignStateManager>.Instance.SetProfileState(profileState);
-                            TerraNilAP.Logger.LogInfo("Setting up handlers");
-                            TerraNilAP.Session.Items.ItemReceived += TerraNilAP.ReceivedItem;
-                            MonoSingleton<ProfileSelectionHandler>.Instance.Hide();
-                            TerraNilAP.Logger.LogInfo("Applying patches");
-                            GameObject.Find("/Canvas/Buttons/SwitchProfileButton").GetComponent<Button>().onClick.AddListener(OnSwitchProfile);
-                            TerraNilAP.Session.Socket.ErrorReceived += delegate {
-                                TerraNilAP.Logger.LogInfo("Connection lost");
-                                Unpatch();
-                            };
-                            InjectPatches();
-                            TerraNilAP.Logger.LogInfo("Connection successful");
-
-                            long clearsNeeded = 7;
-                            switch (login.SlotData.GetValueSafe("levels_cleared_to_goal"))
-                            {
-                                case long n:
-                                    clearsNeeded = n;
-                                    break;
-                                default:
-                                    MonoSingleton<MessageHandler>.Instance.CreateConfirmationDialog(
-                                        "Warning",
-                                        $"Failed to find the number of levels cleared to goal in slot data, assuming {clearsNeeded} instead"
-                                    );
-                                    break;
-                            }
-                            TerraNilAP.MissionsCompletedToGoal = clearsNeeded;
-
-                            var platform = MonoSingleton<CampaignStateManager>.Instance.Platform;
-                            TerraNilAP.Completed = new();
-                            if (System.IO.File.Exists(System.IO.Path.Combine(platform.ProfileDirectory, "missions.ap")))
-                            {
-                                var loaded = System.IO.File.ReadAllText(System.IO.Path.Combine(platform.ProfileDirectory, "missions.ap"));
-                                foreach (var m in loaded.Split(','))
-                                {
-                                    try {
-                                        TerraNilAP.Completed.Add((Model.Mission) int.Parse(m));
-                                    }
-                                    catch (System.Exception e)
-                                    {
-                                        TerraNilAP.Logger.LogError($"Failed parsing {m} as mission: {e.Message}\n{e.StackTrace}");
-                                    }
-                                }
-                            }
-                            TerraNilAP.Logger.LogInfo($"{TerraNilAP.Completed.Count} missions already completed");
-                            return;
-                    }
-                }
-                catch (System.Threading.Tasks.TaskCanceledException ex)
-                {
-                    TerraNilAP.Logger.LogError($"Failed connecting to archipelago: {ex.InnerException}");
-                    MonoSingleton<MessageHandler>.Instance.CreateConfirmationDialog("Error", "Connection failed. Are host and port correct?");
-                }
-                catch (System.Exception ex)
-                {
-                    TerraNilAP.Logger.LogError($"Failed connecting to archipelago: {ex}");
-                    MonoSingleton<MessageHandler>.Instance.CreateConfirmationDialog("Error", "Connection failed. Are host and port correct?");
-                }
+                await TerraNilAP.Connection.Connect();
             },
             delegate { TerraNilAP.Logger.LogInfo("Cancelled"); }
         );

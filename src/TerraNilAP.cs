@@ -21,7 +21,7 @@ public class TerraNilAP : BaseUnityPlugin
     internal static new ManualLogSource Logger;
 
     public static Harmony Harmony;
-    public static ArchipelagoSession Session;
+    public static APConnection Connection;
     public static HashSet<Mission> Completed;
     public static long MissionsCompletedToGoal;
     public static Dictionary<Mission, IMissionLogic> MissionLogic = new Dictionary<Mission, IMissionLogic>();
@@ -126,7 +126,7 @@ public class TerraNilAP : BaseUnityPlugin
     {
         Completed.Add(mission);
         Logger.LogInfo($"{mission} completed; {Completed.Count}/{MissionsCompletedToGoal}");
-        if (Completed.Count >= MissionsCompletedToGoal) Session.SetGoalAchieved();
+        if (Completed.Count >= MissionsCompletedToGoal) Connection.SetGoalAchieved();
         var toSave = Completed.Select(m => (int) m).Select(m => m.ToString()).Join(delimiter: ",");
         var platform = Utils.MonoSingleton<Global.CampaignStateManager>.Instance.Platform;
         System.IO.File.WriteAllText(System.IO.Path.Combine(platform.ProfileDirectory, "missions.ap"), toSave);

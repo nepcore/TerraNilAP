@@ -14,5 +14,5 @@ class TerraNilWebWorld(WebWorld):
         ["nepcore"]
     )
     tutorials = [setup_en]
-    option_groupd = option_groups
+    option_groups = option_groups
     options_presets = option_presets
