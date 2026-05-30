@@ -16,57 +16,61 @@ using System.Collections.ObjectModel;
 
 namespace TerraNilAP;
 
-public class DummyLocations : ILocationCheckHelper
-{
-    public ReadOnlyCollection<long> AllLocations => new(new List<long>());
-    public ReadOnlyCollection<long> AllLocationsChecked => new(new List<long>());
-    public ReadOnlyCollection<long> AllMissingLocations => new(new List<long>());
-    public event LocationCheckHelper.CheckedLocationsUpdatedHandler CheckedLocationsUpdated;
-    public void CompleteLocationChecks(params long[] ids) {}
-    public async Task CompleteLocationChecksAsync(params long[] ids) {
-        return;
-    }
-    public async Task<Dictionary<long, ScoutedItemInfo>> ScoutLocationsAsync(HintCreationPolicy hcp, params long[] ids) {
-        return new Dictionary<long, ScoutedItemInfo>();
-    }
-    public async Task<Dictionary<long, ScoutedItemInfo>> ScoutLocationsAsync(bool createHint, params long[] ids) {
-        return new Dictionary<long, ScoutedItemInfo>();
-    }
-    public async Task<Dictionary<long, ScoutedItemInfo>> ScoutLocationsAsync(params long[] ids) {
-        return new Dictionary<long, ScoutedItemInfo>();
-    }
-    public long GetLocationIdFromName(string game, string name) {
-        return -1;
-    }
-    public string GetLocationNameFromId(long id, string game) {
-        return null;
-    }
-}
-
-public class DummyItems : IReceivedItemsHelper
-{
-    public int Index => 0;
-    public ReadOnlyCollection<ItemInfo> AllItemsReceived => new(new List<ItemInfo>());
-    public event ReceivedItemsHelper.ItemReceivedHandler ItemReceived;
-    public string GetItemName(long id, string game) {
-        return null;
-    }
-    public bool Any()
-    {
-        return false;
-    }
-    public ItemInfo PeekItem()
-    {
-        return null;
-    }
-    public ItemInfo DequeueItem()
-    {
-        return null;
-    }
-}
-
 public class APConnection
 {
+    private class DummyLocations : ILocationCheckHelper
+    {
+        public ReadOnlyCollection<long> AllLocations => new(new List<long>());
+        public ReadOnlyCollection<long> AllLocationsChecked => new(new List<long>());
+        public ReadOnlyCollection<long> AllMissingLocations => new(new List<long>());
+        #pragma warning disable CS0067
+        public event LocationCheckHelper.CheckedLocationsUpdatedHandler CheckedLocationsUpdated;
+        #pragma warning restore CS0067
+        public void CompleteLocationChecks(params long[] ids) {}
+        public async Task CompleteLocationChecksAsync(params long[] ids) {
+            return;
+        }
+        public async Task<Dictionary<long, ScoutedItemInfo>> ScoutLocationsAsync(HintCreationPolicy hcp, params long[] ids) {
+            return new Dictionary<long, ScoutedItemInfo>();
+        }
+        public async Task<Dictionary<long, ScoutedItemInfo>> ScoutLocationsAsync(bool createHint, params long[] ids) {
+            return new Dictionary<long, ScoutedItemInfo>();
+        }
+        public async Task<Dictionary<long, ScoutedItemInfo>> ScoutLocationsAsync(params long[] ids) {
+            return new Dictionary<long, ScoutedItemInfo>();
+        }
+        public long GetLocationIdFromName(string game, string name) {
+            return -1;
+        }
+        public string GetLocationNameFromId(long id, string game) {
+            return null;
+        }
+    }
+
+    private class DummyItems : IReceivedItemsHelper
+    {
+        public int Index => 0;
+        public ReadOnlyCollection<ItemInfo> AllItemsReceived => new(new List<ItemInfo>());
+        #pragma warning disable CS0067
+        public event ReceivedItemsHelper.ItemReceivedHandler ItemReceived;
+        #pragma warning restore CS0067
+        public string GetItemName(long id, string game) {
+            return null;
+        }
+        public bool Any()
+        {
+            return false;
+        }
+        public ItemInfo PeekItem()
+        {
+            return null;
+        }
+        public ItemInfo DequeueItem()
+        {
+            return null;
+        }
+    }
+
     private string host;
     private string port;
     private string slot;
@@ -91,11 +95,9 @@ public class APConnection
         this.port = port;
         this.slot = slot;
         this.pass = pass;
-        Application.quitting += delegate {
+        Application.quitting += async delegate {
             TerraNilAP.Logger.LogInfo("Application quitting");
-            if (cutsceneSkipper != null) UnityEngine.Object.DestroyImmediate(cutsceneSkipper);
-            if (TerraNilAP.Console != null) TerraNilAP.Console.Destroy();
-            Disconnect().Wait();
+            await Disconnect();
         };
     }
 
@@ -149,7 +151,7 @@ public class APConnection
                     {
                         MonoSingleton<CampaignStateManager>.Instance.CreateAndAssignNewProfile(profileName);
                     }
-                    MonoSingleton<ProfileSelectionHandler>.Instance.UpdateAllProfileLanguages();
+                    if (!isReconnect) MonoSingleton<ProfileSelectionHandler>.Instance.UpdateAllProfileLanguages();
                     var profileState = MonoSingleton<CampaignStateManager>.Instance.LoadPlayerProfile(profileName);
                     profileState.difficultyState.hasSelectedDifficulty = true;
                     profileState.hasPlayedTutorial = true;
@@ -160,9 +162,9 @@ public class APConnection
                     MonoSingleton<CampaignStateManager>.Instance.SetProfileState(profileState);
                     TerraNilAP.Logger.LogInfo("Setting up handlers");
                     session.Items.ItemReceived += TerraNilAP.ReceivedItem;
-                    MonoSingleton<ProfileSelectionHandler>.Instance.Hide();
+                    if (!isReconnect) MonoSingleton<ProfileSelectionHandler>.Instance.Hide();
                     TerraNilAP.Logger.LogInfo("Applying patches");
-                    GameObject.Find("/Canvas/Buttons/SwitchProfileButton").GetComponent<Button>().onClick.AddListener(ProfileSelectionPatch.OnSwitchProfile);
+                    if (!isReconnect) GameObject.Find("/Canvas/Buttons/SwitchProfileButton").GetComponent<Button>().onClick.AddListener(ProfileSelectionPatch.OnSwitchProfile);
                     session.Socket.ErrorReceived += async delegate {
                         await Reconnect();
                     };
@@ -222,25 +224,25 @@ public class APConnection
         }
         catch (System.Threading.Tasks.TaskCanceledException ex)
         {
+            TerraNilAP.Logger.LogError($"Failed connecting to archipelago: [inner] {ex.InnerException}");
             if (isReconnect)
             {
                 await Reconnect();
             }
             else
             {
-                TerraNilAP.Logger.LogError($"Failed connecting to archipelago: {ex.InnerException}");
                 MonoSingleton<MessageHandler>.Instance.CreateConfirmationDialog("Error", "Connection failed. Are host and port correct?");
             }
         }
         catch (System.Exception ex)
         {
+            TerraNilAP.Logger.LogError($"Failed connecting to archipelago: {ex}");
             if (isReconnect)
             {
                 await Reconnect();
             }
             else
             {
-                TerraNilAP.Logger.LogError($"Failed connecting to archipelago: {ex}");
                 MonoSingleton<MessageHandler>.Instance.CreateConfirmationDialog("Error", "Connection failed. Are host and port correct?");
             }
         }

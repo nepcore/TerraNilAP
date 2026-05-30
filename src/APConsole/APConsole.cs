@@ -4,11 +4,27 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 namespace APConsole;
 
 public class APConsole
 {
+    private class ConsoleUpdate : MonoBehaviour
+    {
+        private APConsole self;
+
+        public void SetConsole(APConsole console)
+        {
+            self = console;
+        }
+
+        private void Update()
+        {
+            self.Update();
+        }
+    }
+
     private GameObject console;
     private TextMeshProUGUI consoleText;
     private string history;
@@ -16,6 +32,7 @@ public class APConsole
     private AssetBundle AssetBundle;
     private TMP_FontAsset Font;
     private bool visible = true;
+    private Queue queue = new();
 
     public APConsole(
         AssetBundle assetBundle,
@@ -38,6 +55,7 @@ public class APConsole
     {
         if (console != null) GameObject.DestroyImmediate(console);
         console = GameObject.Instantiate(AssetBundle.LoadAsset<GameObject>("APConsole"));
+        console.AddComponent<ConsoleUpdate>().SetConsole(this);
         console.SetActive(visible);
 
         consoleText = console.transform.Find("Scroll View/Viewport/Content").gameObject.AddComponent<TextMeshProUGUI>();
@@ -60,15 +78,23 @@ public class APConsole
         if (console != null) console.SetActive(visible);
     }
 
-    private static System.Threading.Mutex mutex = new System.Threading.Mutex();
+    private void Update()
+    {
+        if (queue.Count != 0)
+        {
+            while (queue.Count != 0)
+            {
+                var msg = queue.Dequeue();
+                history += $"\n{msg}";
+            }
+
+            if (consoleText != null) consoleText.text = history;
+        }
+    }
+
     public void AddText(string msg)
     {
-        mutex.WaitOne();
-        var pre = history == null || history.Length == 0 ? "" : "\n";
-        history += $"{pre}{msg}";
-        if (consoleText == null) return;
-        consoleText.text += $"{pre}{msg}";
-        mutex.ReleaseMutex();
+        queue.Enqueue(msg);
     }
 
     public void AddAPMessage(LogMessage msg)
