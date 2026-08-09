@@ -30,9 +30,9 @@ def connect_regions(world: TerraNilWorld) -> None:
     menu = world.get_region("Menu")
     worldmap = world.get_region("World Map")
     t1 = world.get_region(f"{world.starting_level} Tier 1")
-    t2 = world.get_region(f"{world.starting_level} Tier 2")
+    #t2 = world.get_region(f"{world.starting_level} Tier 2")
     menu.connect(t1, f"Menu to {world.starting_level} Tier 1")
-    t2.connect(worldmap, f"{world.starting_level} Tier 2 to World Map")
+    t1.connect(worldmap, f"{world.starting_level} Tier 1 to World Map")
     #menu.connect(world.get_region("River Valley Tier 1"), "Menu to River Valley Tier 1")
 
     for level in world.levels_enabled:

@@ -25,7 +25,7 @@ filler_toclassification = {key: value for key, _, value in filler_names_ids_clas
 ITEM_NAME_TO_ID |=              filler_toid
 ITEM_NAME_TO_CLASSIFICATION |=  filler_toclassification
 
-precollected_names: List[str] = {
+precollected_names = {
     "River Valley": [
         "Wind Turbine",
         "Toxin Scrubber",
@@ -41,6 +41,7 @@ precollected_names: List[str] = {
     "Abandoned Quarry": [
         "Wind Turbine",
         "Toxin Scrubber",
+        "Seismic Detonator",
     ],
     "Desolate Island": [
         "Wind Turbine",
@@ -55,6 +56,33 @@ precollected_names: List[str] = {
         "Geothermal Plant",
         "Seismic Detonator",
         "Toxin Scrubber"
+    ]
+}
+
+early_names = {
+    "River Valley": [
+        "Irrigator",
+    ],
+    "Hill and Dale": [
+        "Irrigator",
+    ],
+    "Polluted Bay": [
+        "Pylon",
+        "Irrigator",
+    ],
+    "Abandoned Quarry": [
+        "Irrigator",
+        "Water Pump",
+    ],
+    "Desolate Island": [
+        "Irrigator",
+        "Mineralizer",
+    ],
+    "Scorched Caldera": [
+        "Irrigator",
+    ],
+    "Volcanic Glacier": [
+        "Irrigator",
     ]
 }
 
@@ -73,6 +101,9 @@ def create_item(world: TerraNilWorld, name: str) -> TerraNilItem:
 def create_all_items(world: TerraNilWorld) -> None:
     precollected = [f"{world.starting_level} - {item}" for item in precollected_names[world.starting_level]]
     precollected += [f"{world.starting_level} Unlock"]
+
+    for item in early_names[world.starting_level]:
+        world.multiworld.early_items[world.player][item] = 1
 
     items = []
     for level in world.levels_enabled:

@@ -15,8 +15,7 @@ def set_all_entrance_rules(world: TerraNilWorld) -> None:
         world.set_rule(world.get_entrance(f"World Map to {level} Tier 1"), Has(f"{level} Unlock"))
         world.set_rule(world.get_entrance(f"{level} Tier 1 to {level} Tier 2"), Has(f"{level} - Tier 1 Completed"))
         world.set_rule(world.get_entrance(f"{level} Tier 2 to {level} Tier 3"), Has(f"{level} - Tier 2 Completed"))
-        #world.set_rule(world.get_entrance(f"{level} Tier 3 to World Map"), Has(f"{level} - Liftoff"))
-        world.set_rule(world.get_entrance(f"{world.starting_level} Tier 2 to World Map"), Has(f"{world.starting_level} - Tier 2 Completed"))
+        world.set_rule(world.get_entrance(f"{world.starting_level} Tier 1 to World Map"), Has(f"{world.starting_level} - Tier 1 Completed"))
 
     if world.options.climate_goals and "River Valley" in world.levels_enabled:
         rivervalley_climate = world.get_entrance("River Valley Tier 2 to River Valley Climate Goals")
@@ -597,7 +596,7 @@ def set_all_location_rules_volcanic_glacier(world: TerraNilWorld) -> None:
     lava = Has("Volcanic Glacier - Seismic Detonator")
     energy = lava & Has("Volcanic Glacier - Geothermal Plant")
     first_greenery = Has("Volcanic Glacier - Irrigator")
-    greenery = energy &first_greenery & Has("Volcanic Glacier - Toxin Scrubber")
+    greenery = energy & first_greenery & Has("Volcanic Glacier - Toxin Scrubber")
 
     world.set_rule(world.get_location("Volcanic Glacier - First Lava"), lava)
     world.set_rule(world.get_location("Volcanic Glacier - First Energy"), energy)
@@ -648,7 +647,7 @@ def set_all_location_rules_volcanic_glacier(world: TerraNilWorld) -> None:
 
     photos = tier2 & Has("Volcanic Glacier - Animal Observatory")
     world.set_rule(world.get_location("Volcanic Glacier - 3 Photo Stars"), photos)
-    world.set_rule(world.get_location("Volcanic Glacier - 10 Photo Stars"), recyclingbase & photos)
+    world.set_rule(world.get_location("Volcanic Glacier - 10 Photo Stars"), recyclingbase & photos & Has("Volcanic Glacier - Flash Freezer"))
     world.set_rule(world.get_location("Volcanic Glacier - Bronze Photo"), photos)
     world.set_rule(world.get_location("Volcanic Glacier - Silver Photo"), photos)
     world.set_rule(world.get_location("Volcanic Glacier - Gold Photo"), recyclingbase & photos)
